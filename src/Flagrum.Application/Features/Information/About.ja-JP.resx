@@ -90,13 +90,4 @@
     <data name="BMC" xml:space="preserve">
         <value>私にコーヒーを買って</value>
     </data>
-    <data name="Ko-Fi" xml:space="preserve">
-        <value>Ko-Fiで寄付をする</value>
-    </data>
-    <data name="PayPal" xml:space="preserve">
-        <value>PayPalで寄付する</value>
-    </data>
-    <data name="Patreon" xml:space="preserve">
-        <value>パトロンになる</value>
-    </data>
 </root>

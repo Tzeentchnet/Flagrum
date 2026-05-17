@@ -39,9 +39,9 @@ public static class ConfigurationMigration
                 : new Guid(context.GetString(ConfigurationKey.CurrentProfile)),
             LatestVersionNotes = context.GetString(ConfigurationKey.LatestVersionNotes),
             GiftToken = giftToken == null ? Guid.Empty : new Guid(context.GetString(ConfigurationKey.GiftToken)),
-            PatreonToken = context.GetString(ConfigurationKey.PatreonToken),
-            PatreonRefreshToken = context.GetString(ConfigurationKey.PatreonRefreshToken),
-            PatreonTokenExpiry = context.GetDateTime(ConfigurationKey.PatreonTokenExpiry)
+            PremiumAccountToken = context.GetString(ConfigurationKey.PremiumAccountToken),
+            PremiumAccountRefreshToken = context.GetString(ConfigurationKey.PremiumAccountRefreshToken),
+            PremiumAccountTokenExpiry = context.GetDateTime(ConfigurationKey.PremiumAccountTokenExpiry)
         };
 
         // Create the new profiles

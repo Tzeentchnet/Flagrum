@@ -54,7 +54,7 @@ public interface IProfileService : IDisposable
     string GameDirectory { get; }
     string ModStatePath { get; }
     bool IsGamePathAvailable(string path);
-    void SetPatreonToken(string? token, string? refreshToken, DateTime expiry);
+    void SetPremiumAccountToken(string? token, string? refreshToken, DateTime expiry);
     void SetGiftToken(string token);
     void SetCurrentProfile(string id);
     void Add(IProfileViewModel profile);

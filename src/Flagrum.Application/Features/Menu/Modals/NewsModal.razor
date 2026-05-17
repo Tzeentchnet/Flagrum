@@ -20,7 +20,7 @@
             <span class="block">
                 I am pleased to announce that Flagrum is once again fully open-source!<br/><br/>
                 Prior to now, the public codebase had not been updated for quite some time due to the implementation<br/>
-                of Patreon benefits, and the need to protect that code from malicious actors. I finally found the time<br/>
+                of premium benefits, and the need to protect that code from malicious actors. I finally found the time<br/>
                 to perform a large scale rewrite to separate these benefits from the main codebase.
             </span>
 
@@ -57,10 +57,5 @@
     {
         Modal.Close();
         return Parent.OnNewsModalClosedAsync(_lastSeenVersion);
-    }
-
-    private void VisitPatreon()
-    {
-        Process.Start(new ProcessStartInfo("https://patreon.com/Kizari") {UseShellExecute = true});
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Velopack;
 using Velopack.Sources;
 
@@ -21,7 +22,7 @@ public static class UpdateHelper
                 SplashViewModel.Instance.SetLoadingText("Downloading updates");
                 await manager.DownloadUpdatesAsync(newVersion);
                 SplashViewModel.Instance.SetLoadingText("Updating Flagrum");
-                manager.ApplyUpdatesAndRestart();
+                manager.ApplyUpdatesAndRestart(newVersion.TargetFullRelease, Array.Empty<string>());
                 return true;
             }
         }

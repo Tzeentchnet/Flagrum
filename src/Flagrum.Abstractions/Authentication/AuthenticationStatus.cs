@@ -21,19 +21,19 @@ public enum AuthenticationStatus
     GiftTokenExpired,
 
     /// <summary>
-    /// The user has been authenticated as a patron.
+    /// The user has been authenticated as a subscriber.
     /// </summary>
-    Patron,
+    Subscriber,
 
     /// <summary>
-    /// The user does not have a high enough patron tier, so they are not authenticated.
+    /// The user does not have a high enough subscription tier, so they are not authenticated.
     /// </summary>
-    PatronTierTooLow,
+    SubscriptionTierTooLow,
 
     /// <summary>
-    /// The user authenticated via Patreon, but does not belong to any of the tiers, so they are not authenticated.
+    /// The user authenticated via a premium account, but does not belong to any of the tiers, so they are not authenticated.
     /// </summary>
-    PatronNoTier,
+    NoSubscriptionTier,
 
     /// <summary>
     /// An error occurred while trying to determine the authentication status.

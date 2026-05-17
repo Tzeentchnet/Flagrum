@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Flagrum.Application.Utilities;
 
 /// <summary>
-/// Helper class for interfacing with the premium DLL, if present.
+/// Helper class for interfacing with the optional premium extension DLL.
 /// </summary>
 public class PremiumHelper
 {
@@ -39,11 +39,9 @@ public class PremiumHelper
 
     /// <summary>
     /// Adds premium services based on the presence of the <c>Flagrum.Premium</c>
-    /// DLL in the application directory. This DLL is distributed with Flagrum releases,
-    /// so should always be present. However, if the DLL is not present, such as if
-    /// compiling a community fork without the premium DLL, equivalent free services
-    /// will be added instead, allowing the application to function correctly without
-    /// premium features.
+    /// DLL in the application directory. Community builds use the local stub project,
+    /// which registers equivalent free services and does not enable premium features.
+    /// If the DLL is not present, those same free services will be registered directly.
     /// </summary>
     /// <param name="services">Service collection for the application.</param>
     /// <returns>The same service collection that was passed in.</returns>

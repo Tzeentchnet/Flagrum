@@ -39,13 +39,13 @@ public partial class Configuration : IConfiguration
     private Guid _giftToken;
 
     [MemoryPackInclude] [ConcurrentProperty]
-    private string _patreonToken;
+    private string _premiumAccountToken;
 
     [MemoryPackInclude] [ConcurrentProperty]
-    private string _patreonRefreshToken;
+    private string _premiumAccountRefreshToken;
 
     [MemoryPackInclude] [ConcurrentProperty]
-    private DateTime _patreonTokenExpiry;
+    private DateTime _premiumAccountTokenExpiry;
 
     [MemoryPackConstructor]
     public Configuration() { }

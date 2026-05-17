@@ -6,9 +6,9 @@ public interface IConfiguration
     Guid CurrentProfile { get; set; }
     string LatestVersionNotes { get; set; }
     Guid GiftToken { get; set; }
-    string PatreonToken { get; set; }
-    string PatreonRefreshToken { get; set; }
-    DateTime PatreonTokenExpiry { get; set; }
+    string PremiumAccountToken { get; set; }
+    string PremiumAccountRefreshToken { get; set; }
+    DateTime PremiumAccountTokenExpiry { get; set; }
     AuthenticationType AuthenticationType { get; set; }
     bool ShouldMigratePreProfilesData { get; set; }
     List<IProfile> Profiles { get; set; }

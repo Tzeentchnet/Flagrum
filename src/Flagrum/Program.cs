@@ -34,8 +34,8 @@ internal static class Program
 
         // Initialize Velopack
         VelopackApp.Build()
-            .WithFirstRun(OnFreshInstall)
-            .WithBeforeUninstallFastCallback(OnBeforeUninstall)
+            .OnFirstRun(OnFreshInstall)
+            .OnBeforeUninstallFastCallback(OnBeforeUninstall)
             .Run();
 
         // Handle commandline arguments

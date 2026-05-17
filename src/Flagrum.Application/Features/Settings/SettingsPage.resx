@@ -90,17 +90,17 @@
     <data name="Status" xml:space="preserve">
         <value>Status</value>
     </data>
-    <data name="NotPatron" xml:space="preserve">
-        <value>Not currently a patron</value>
+    <data name="NotSubscribed" xml:space="preserve">
+        <value>Not currently subscribed</value>
     </data>
-    <data name="PatreonNotLinked" xml:space="preserve">
-        <value>Patreon account not linked</value>
+    <data name="PremiumAccountNotLinked" xml:space="preserve">
+        <value>Premium account not linked</value>
     </data>
-    <data name="LinkPatreonAccount" xml:space="preserve">
-        <value>Link Patreon Account</value>
+    <data name="LinkPremiumAccount" xml:space="preserve">
+        <value>Link Premium Account</value>
     </data>
-    <data name="UnlinkPatreonAccount" xml:space="preserve">
-        <value>Unlink Patreon Account</value>
+    <data name="UnlinkPremiumAccount" xml:space="preserve">
+        <value>Unlink Premium Account</value>
     </data>
     <data name="EditProfiles" xml:space="preserve">
         <value>Edit Profiles</value>

@@ -19,9 +19,10 @@ public class MaterialTests
 
         var material2Data = material.Write();
         var material2 = new GameMaterial();
-        material2.Read(materialData);
+        material2.Read(material2Data);
+        var material3Data = material2.Write();
 
         Assert.True(material.DeepCompare(material2));
-        Assert.True(materialData.HashCompare(material2Data));
+        Assert.True(material2Data.HashCompare(material3Data));
     }
 }

@@ -95,13 +95,4 @@
     <data name="BMC" xml:space="preserve">
         <value>Buy Me a Coffee</value>
     </data>
-    <data name="Ko-Fi" xml:space="preserve">
-        <value>Support me on Ko-Fi</value>
-    </data>
-    <data name="PayPal" xml:space="preserve">
-        <value>Donate via PayPal</value>
-    </data>
-    <data name="Patreon" xml:space="preserve">
-        <value>Become a Patron</value>
-    </data>
 </root>

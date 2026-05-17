@@ -172,11 +172,11 @@ public class ProfileService : IProfileService
         return !allPaths.Any(p => IOHelper.AreInSameDirectory(p, path));
     }
 
-    public void SetPatreonToken(string token, string refreshToken, DateTime expiry)
+    public void SetPremiumAccountToken(string token, string refreshToken, DateTime expiry)
     {
-        _configuration.PatreonToken = token;
-        _configuration.PatreonRefreshToken = refreshToken;
-        _configuration.PatreonTokenExpiry = expiry;
+        _configuration.PremiumAccountToken = token;
+        _configuration.PremiumAccountRefreshToken = refreshToken;
+        _configuration.PremiumAccountTokenExpiry = expiry;
     }
 
     public void SetGiftToken(string token)

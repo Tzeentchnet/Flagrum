@@ -25,6 +25,6 @@ public enum StateKey
     AssetExplorerAddressBarSelect,
     ForspokenPatch,
     HasMigratedAwayFromSqlite,
-    HidePatreonButton,
+    LegacySupportButtonHidden,
     HideLucentTab
 }

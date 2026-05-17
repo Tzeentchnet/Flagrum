@@ -4,9 +4,6 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Folder Name="/.github/">
-    <File Path=".github\FUNDING.yml" />
-  </Folder>
   <Folder Name="/.github/images/">
     <File Path=".github\images\Splash.png" />
   </Folder>
@@ -14,9 +11,6 @@
     <File Path=".github\images\readme\asset.jpg" />
     <File Path=".github\images\readme\bmc-button.png" />
     <File Path=".github\images\readme\gameplay.jpg" />
-    <File Path=".github\images\readme\kofi-button.png" />
-    <File Path=".github\images\readme\patreon-button.png" />
-    <File Path=".github\images\readme\paypal-button.png" />
     <File Path=".github\images\readme\splash_github.svg" />
     <File Path=".github\images\readme\workshop.jpg" />
   </Folder>
@@ -27,8 +21,10 @@
   </Folder>
   <Folder Name="/.github/workflows/">
     <File Path=".github\workflows\main.yml" />
+    <File Path=".github\workflows\validation.yml" />
   </Folder>
   <Folder Name="/docs/">
+    <File Path="docs\code-review-dependency-analysis-2026-05-17.md" />
     <File Path="docs\distribution.md" />
   </Folder>
   <Folder Name="/docs/changelog/">
@@ -141,6 +137,12 @@
       <Configuration Solution="Release|x86" Project="Release|Any CPU" />
     </Project>
     <Project Path="src\Flagrum.Core\Flagrum.Core.csproj">
+      <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
+      <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
+      <Configuration Solution="Release|x64" Project="Release|Any CPU" />
+      <Configuration Solution="Release|x86" Project="Release|Any CPU" />
+    </Project>
+    <Project Path="src\Flagrum.Premium\Flagrum.Premium.csproj" Type="Classic C#">
       <Configuration Solution="Debug|x64" Project="Debug|Any CPU" />
       <Configuration Solution="Debug|x86" Project="Debug|Any CPU" />
       <Configuration Solution="Release|x64" Project="Release|Any CPU" />

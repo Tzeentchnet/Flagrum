@@ -8,7 +8,7 @@ _Released 13 February 2023_
 - New profiles system that allows multiple copies of Luminous games to be managed at once
 - Support for previewing and exporting texture arrays
 - Download Mods button added to Mod Manager
-- Patreon integration and early access features
+- Premium account integration and early access features
 
 ### Changes
 

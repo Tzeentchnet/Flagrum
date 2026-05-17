@@ -19,7 +19,7 @@ _Released 2 October 2023_
 
 - Migrated database structure for profiles
 - GitHub button added for Flagrum support
-- Patreon offerings have been updated 
+- Premium offerings have been updated
 - Improved Flagrum's automatic update capabilities 
 - Slight changes to BTEX texture conversion
 - Improved mod loader and .FMOD file format 

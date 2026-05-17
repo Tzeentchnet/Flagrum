@@ -113,8 +113,7 @@
                 if (EarlyAccessMods.GuidMap.ContainsKey(mod.Identifier) && !Authentication.IsAuthenticated)
                 {
                     await InvokeAsync(() => Parent.Alert.Open("Error", "Flagrum+ Required",
-                        "This mod requires Flagrum+ to run. Please ensure you are subscribed to the Flagrum" +
-                        " Patreon and have linked your Patreon account in the Settings tab.",
+                        "This mod requires Flagrum+ to run. Please ensure your premium account is linked in the Settings tab.",
                         null));
                     await InvokeAsync(() => Parent.SetLoading(false));
                     return;

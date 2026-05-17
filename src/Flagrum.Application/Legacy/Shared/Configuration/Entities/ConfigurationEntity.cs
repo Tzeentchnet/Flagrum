@@ -8,9 +8,9 @@ public enum ConfigurationKey
 {
     CurrentProfile,
     LatestVersionNotes,
-    PatreonToken,
-    PatreonRefreshToken,
-    PatreonTokenExpiry,
+    PremiumAccountToken,
+    PremiumAccountRefreshToken,
+    PremiumAccountTokenExpiry,
     ClientId,
     GiftToken
 }

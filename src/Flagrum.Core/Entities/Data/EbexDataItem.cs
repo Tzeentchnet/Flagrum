@@ -143,21 +143,21 @@ public class DataItem : IItem, IDisposable, IEnumerable<DataItem>, IEnumerable
     {
         get
         {
-            if (field != null)
+            if (this.field != null)
             {
-                return field.DisplayName;
+                return this.field.DisplayName;
             }
 
             return name.StartsWith('[') ? DataTypeDisplayName : name;
         }
         set
         {
-            if (field == null)
+            if (this.field == null)
             {
                 return;
             }
 
-            field.DisplayName = value;
+            this.field.DisplayName = value;
         }
     }
 
@@ -165,9 +165,9 @@ public class DataItem : IItem, IDisposable, IEnumerable<DataItem>, IEnumerable
     {
         get
         {
-            if (field != null && field.Category != null)
+            if (this.field != null && this.field.Category != null)
             {
-                return field.Category;
+                return this.field.Category;
             }
 
             return dataType != null ? dataType.Category : null;
@@ -178,9 +178,9 @@ public class DataItem : IItem, IDisposable, IEnumerable<DataItem>, IEnumerable
     {
         get
         {
-            if (field != null && field.Description != null)
+            if (this.field != null && this.field.Description != null)
             {
-                return field.Description;
+                return this.field.Description;
             }
 
             return dataType != null ? dataType.Description : null;
@@ -252,10 +252,10 @@ public class DataItem : IItem, IDisposable, IEnumerable<DataItem>, IEnumerable
 
     public Field Field
     {
-        get => field;
+        get => this.field;
         set
         {
-            field = value;
+            this.field = value;
             browsable = true;
             setupBrowsable();
         }
@@ -278,7 +278,7 @@ public class DataItem : IItem, IDisposable, IEnumerable<DataItem>, IEnumerable
                 return RuntimeReadOnly == RuntimeOverrideType.ROT_TRUE;
             }
 
-            if (field != null && field.ReadOnly)
+            if (this.field != null && this.field.ReadOnly)
             {
                 return true;
             }
@@ -287,12 +287,12 @@ public class DataItem : IItem, IDisposable, IEnumerable<DataItem>, IEnumerable
         }
         set
         {
-            if (field == null)
+            if (this.field == null)
             {
                 return;
             }
 
-            field.ReadOnly = value;
+            this.field.ReadOnly = value;
         }
     }
 
@@ -390,9 +390,9 @@ public class DataItem : IItem, IDisposable, IEnumerable<DataItem>, IEnumerable
     {
         get
         {
-            if (Browsable && field != null)
+            if (Browsable && this.field != null)
             {
-                var attribute = field.GetAttribute(nameof(CenterTextTarget));
+                var attribute = this.field.GetAttribute(nameof(CenterTextTarget));
                 if (attribute != null)
                 {
                     return attribute;
@@ -408,9 +408,9 @@ public class DataItem : IItem, IDisposable, IEnumerable<DataItem>, IEnumerable
     {
         get
         {
-            if (Browsable && field != null)
+            if (Browsable && this.field != null)
             {
-                var attribute = field.GetAttribute(nameof(CenterTextBoolTrue));
+                var attribute = this.field.GetAttribute(nameof(CenterTextBoolTrue));
                 if (attribute != null)
                 {
                     return attribute;
@@ -426,9 +426,9 @@ public class DataItem : IItem, IDisposable, IEnumerable<DataItem>, IEnumerable
     {
         get
         {
-            if (field != null && Browsable && field.CenterTextCommand != null)
+            if (this.field != null && Browsable && this.field.CenterTextCommand != null)
             {
-                return field.CenterTextCommand;
+                return this.field.CenterTextCommand;
             }
 
             var dataType = this.dataType;
@@ -505,17 +505,17 @@ public class DataItem : IItem, IDisposable, IEnumerable<DataItem>, IEnumerable
 
     public bool IsDependencyPathItem => DependencyPath || DependencyFolderPath;
 
-    public bool DependencyPath => field != null && field.DependencyPath;
+    public bool DependencyPath => this.field != null && this.field.DependencyPath;
 
-    public bool DependencyFolderPath => field != null && field.DependencyFolderPath;
+    public bool DependencyFolderPath => this.field != null && this.field.DependencyFolderPath;
 
     public string SpecialType
     {
         get
         {
-            if (field != null && field.SpecialType != null)
+            if (this.field != null && this.field.SpecialType != null)
             {
-                return field.SpecialType;
+                return this.field.SpecialType;
             }
 
             var dataType = this.dataType;
@@ -654,9 +654,9 @@ public class DataItem : IItem, IDisposable, IEnumerable<DataItem>, IEnumerable
     {
         get
         {
-            if (field != null)
+            if (this.field != null)
             {
-                return field.WakeUpCurveEditorByDoubleClick;
+                return this.field.WakeUpCurveEditorByDoubleClick;
             }
 
             return dataType != null ? dataType.WakeUpCurveEditorByDoubleClick : -1;
@@ -667,24 +667,24 @@ public class DataItem : IItem, IDisposable, IEnumerable<DataItem>, IEnumerable
     {
         get
         {
-            if (field != null)
+            if (this.field != null)
             {
-                return field.TimeLine;
+                return this.field.TimeLine;
             }
 
             return dataType != null && dataType.TimeLine;
         }
     }
 
-    public bool TimeLineExposable => field != null && field.TimeLineExposable;
+    public bool TimeLineExposable => this.field != null && this.field.TimeLineExposable;
 
     public bool DataGrid
     {
         get
         {
-            if (field != null)
+            if (this.field != null)
             {
-                return field.DataGrid;
+                return this.field.DataGrid;
             }
 
             return dataType != null && dataType.DataGrid;

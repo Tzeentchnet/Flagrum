@@ -63,17 +63,11 @@
     <data name="JoinSubtext2" xml:space="preserve">
         <value>Discord的伺服器</value>
     </data>
-    <data name="Ko-Fi" xml:space="preserve">
-        <value>在Ko-Fi上支援我</value>
-    </data>
     <data name="LevelEditor" xml:space="preserve">
         <value>創建《最終幻想15》關卡編輯器</value>
     </data>
     <data name="NodeEditor" xml:space="preserve">
         <value>為EXML創建一個視覺化的腳本工具</value>
-    </data>
-    <data name="PayPal" xml:space="preserve">
-        <value>通過PayPal支援平臺</value>
     </data>
     <data name="Roadmap" xml:space="preserve">
         <value>路標</value>

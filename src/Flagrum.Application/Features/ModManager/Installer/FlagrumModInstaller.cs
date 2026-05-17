@@ -48,8 +48,7 @@ public partial class FlagrumModInstaller
         catch (EarlyAccessException)
         {
             return new ModInstallationResult("Error", "Early Access Required",
-                "This mod is currently in early access. Please ensure you are subscribed to the Flagrum" +
-                " Patreon and have linked your Patreon account in the Settings tab.");
+                "This mod is currently in early access. Please ensure your premium account is linked in the Settings tab.");
         }
 
         // Display mod selection modal if pack contains more than one mod

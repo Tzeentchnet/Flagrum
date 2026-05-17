@@ -1,0 +1,95 @@
+name: Validation
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dotnet:
+    name: .NET Build and Test
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore
+        run: dotnet restore Flagrum.slnx
+
+      - name: Build
+        run: dotnet build Flagrum.slnx -c Debug --no-restore
+
+      - name: Test
+        run: dotnet test tests/Flagrum.Test/Flagrum.Test.csproj -c Debug --no-build
+
+      - name: NuGet Vulnerability Check
+        shell: pwsh
+        run: |
+          $report = dotnet list Flagrum.slnx package --vulnerable --include-transitive --format json | ConvertFrom-Json
+          $vulnerablePackages = @(
+            foreach ($packageProject in $report.projects) {
+              foreach ($framework in @($packageProject.frameworks)) {
+                if ($null -eq $framework) {
+                  continue
+                }
+
+                foreach ($package in @($framework.topLevelPackages) + @($framework.transitivePackages)) {
+                  if ($null -eq $package -or $null -eq $package.vulnerabilities) {
+                    continue
+                  }
+
+                  foreach ($vulnerability in @($package.vulnerabilities)) {
+                    [pscustomobject]@{
+                      Project = $packageProject.path
+                      Framework = $framework.framework
+                      Package = $package.id
+                      Version = $package.resolvedVersion
+                      Severity = $vulnerability.severity
+                      Advisory = $vulnerability.advisoryUrl
+                    }
+                  }
+                }
+              }
+            }
+          )
+
+          if ($vulnerablePackages.Count -gt 0) {
+            $vulnerablePackages | Format-Table -AutoSize
+            throw "NuGet vulnerabilities detected."
+          }
+
+          Write-Host "No NuGet vulnerabilities detected."
+
+  npm-audit:
+    name: npm Audit
+    runs-on: windows-latest
+    continue-on-error: true
+    defaults:
+      run:
+        working-directory: src/Flagrum.Application
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: npm
+          cache-dependency-path: src/Flagrum.Application/package-lock.json
+
+      - name: Install Frontend Dependencies
+        run: npm ci
+
+      - name: npm Audit
+        run: npm audit --audit-level=high

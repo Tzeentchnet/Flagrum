@@ -18,9 +18,9 @@ public enum PremiumComponentType
     AdministrationPanel,
 
     /// <summary>
-    /// Panel that is displayed at the bottom of the settings tab that allows the user to link their Patreon account.
+    /// Panel that is displayed at the bottom of the settings tab that allows the user to link their premium account.
     /// </summary>
-    PatreonAccountPanel,
+    PremiumAccountPanel,
 
     /// <summary>
     /// Displayless component that authenticates the user's premium status when initialized.

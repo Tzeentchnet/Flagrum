@@ -11,9 +11,9 @@ public enum AuthenticationType
     None,
 
     /// <summary>
-    /// User last authenticated via Patreon and has persisted information for this method.
+    /// User last authenticated via an external premium account and has persisted information for this method.
     /// </summary>
-    Patreon,
+    PremiumAccount,
 
     /// <summary>
     /// User last authenticated via a gift token and has persisted information for this method.

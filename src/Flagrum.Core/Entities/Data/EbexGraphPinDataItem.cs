@@ -32,14 +32,14 @@ public class GraphPinDataItem : DataItem
             return pinValueType == null ? _typeMap["0"] : _typeMap[pinValueType];
         }
     }
-    
+
     public string PinValueType
     {
         get
         {
-            if (field != null && field.PinValueType != null)
+            if (this.field != null && this.field.PinValueType != null)
             {
-                return field.PinValueType;
+                return this.field.PinValueType;
             }
 
             var dataType = this.dataType;
@@ -51,9 +51,9 @@ public class GraphPinDataItem : DataItem
     {
         get
         {
-            if (field != null)
+            if (this.field != null)
             {
-                return field.MaxConnection;
+                return this.field.MaxConnection;
             }
 
             var dataType = this.dataType;
@@ -128,7 +128,7 @@ public class PinValueType
         Color = color;
         CompatibleTypes = compatibleTypes.ToList();
     }
-    
+
     public System.Drawing.Color Color { get; set; }
     public List<PrimitiveType> CompatibleTypes { get; set; }
 }

@@ -75,17 +75,17 @@
     <data name="Status" xml:space="preserve">
         <value>ステータス</value>
     </data>
-    <data name="NotPatron" xml:space="preserve">
-        <value>現在、パトロンになっていない</value>
+    <data name="NotSubscribed" xml:space="preserve">
+        <value>現在、登録されていません</value>
     </data>
-    <data name="PatreonNotLinked" xml:space="preserve">
-        <value>Patreonアカウントはリンクされていません</value>
+    <data name="PremiumAccountNotLinked" xml:space="preserve">
+        <value>プレミアムアカウントはリンクされていません</value>
     </data>
-    <data name="LinkPatreonAccount" xml:space="preserve">
-        <value>リンク パトロンアカウント</value>
+    <data name="LinkPremiumAccount" xml:space="preserve">
+        <value>プレミアムアカウントをリンク</value>
     </data>
-    <data name="UnlinkPatreonAccount" xml:space="preserve">
-        <value>パトロンアカウントの解除</value>
+    <data name="UnlinkPremiumAccount" xml:space="preserve">
+        <value>プレミアムアカウントのリンクを解除</value>
     </data>
     <data name="EditProfiles" xml:space="preserve">
         <value>プロファイルを編集する</value>
