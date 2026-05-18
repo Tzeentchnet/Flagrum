@@ -11,14 +11,14 @@
     public bool IsChecked { get; set; }
 
     [Parameter]
-    public Action<bool> OnChange { get; set; }
+    public Action<bool>? OnChange { get; set; }
 
     [Parameter]
-    public string CssStyle { get; set; }
+    public string? CssStyle { get; set; }
 
     private void Toggle()
     {
         IsChecked = !IsChecked;
-        OnChange(IsChecked);
+        OnChange?.Invoke(IsChecked);
     }
 }

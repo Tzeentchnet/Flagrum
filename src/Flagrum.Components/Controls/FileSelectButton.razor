@@ -1,39 +1,39 @@
 ﻿@inject JSInterop Interop
 
-<Button Icon="@Icon" Text="@Text" OnClick="OnClick" CssClass="@CssClass"/>
+<Button Icon="@Icon" Text="@Text" OnClickAsync="OnClick" CssClass="@CssClass"/>
 <InputFile OnChange="OnChange" accept="@AllowedExtensions" id="@_id" class="hidden"/>
 
 @code
 {
-    private string _id;
+    private string _id = string.Empty;
 
     [Parameter]
-    public Action<IBrowserFile> OnFileSelected { get; set; }
+    public Action<IBrowserFile>? OnFileSelected { get; set; }
 
     [Parameter]
-    public string Icon { get; set; }
+    public string? Icon { get; set; }
 
     [Parameter]
-    public string Text { get; set; }
+    public string? Text { get; set; }
 
     [Parameter]
-    public string CssClass { get; set; }
+    public string? CssClass { get; set; }
 
     [Parameter]
-    public string AllowedExtensions { get; set; }
+    public string? AllowedExtensions { get; set; }
 
     protected override void OnInitialized()
     {
         _id = Guid.NewGuid().ToString();
     }
 
-    private async void OnClick()
+    private async Task OnClick()
     {
         await Interop.ClickElement(_id);
     }
 
     private void OnChange(InputFileChangeEventArgs e)
     {
-        OnFileSelected(e.File);
+        OnFileSelected?.Invoke(e.File);
     }
 }

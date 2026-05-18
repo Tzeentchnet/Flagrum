@@ -20,25 +20,25 @@
 
 @code
 {
-    private AutosizeModal Modal { get; set; }
+    private AutosizeModal Modal { get; set; } = null!;
 
-    [Parameter] public string Title { get; set; }
+    [Parameter] public string Title { get; set; } = string.Empty;
 
-    [Parameter] public string Heading { get; set; }
+    [Parameter] public string Heading { get; set; } = string.Empty;
 
-    [Parameter] public string Subtext { get; set; }
+    [Parameter] public string Subtext { get; set; } = string.Empty;
 
-    [Parameter] public string YesText { get; set; }
+    [Parameter] public string YesText { get; set; } = string.Empty;
 
-    [Parameter] public string NoText { get; set; }
+    [Parameter] public string NoText { get; set; } = string.Empty;
 
-    [Parameter] public Action OnYes { get; set; }
+    [Parameter] public Action? OnYes { get; set; }
 
-    [Parameter] public Func<Task> OnYesAsync { get; set; }
+    [Parameter] public Func<Task>? OnYesAsync { get; set; }
 
-    [Parameter] public Action OnNo { get; set; }
+    [Parameter] public Action? OnNo { get; set; }
 
-    [Parameter] public Func<Task> OnNoAsync { get; set; }
+    [Parameter] public Func<Task>? OnNoAsync { get; set; }
 
     protected override void OnInitialized()
     {
@@ -48,6 +48,29 @@
 
     public void Open()
     {
+        Modal.Open();
+    }
+
+    public void Open(
+        string title,
+        string heading,
+        string subtext,
+        Action? onYes = null,
+        Func<Task>? onYesAsync = null,
+        Action? onNo = null,
+        Func<Task>? onNoAsync = null,
+        string? yesText = null,
+        string? noText = null)
+    {
+        Title = title;
+        Heading = heading;
+        Subtext = subtext;
+        YesText = yesText ?? Localizer["Yes"];
+        NoText = noText ?? Localizer["No"];
+        OnYes = onYes;
+        OnYesAsync = onYesAsync;
+        OnNo = onNo;
+        OnNoAsync = onNoAsync;
         Modal.Open();
     }
 

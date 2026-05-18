@@ -4,8 +4,16 @@ Flagrum is an all-in-one modding tool for Final Fantasy XV. It helps modders, ar
 
 This repository is a community fork of the original Flagrum project by [Kizari](https://github.com/Kizari).
 
+## Changes From Upstream
+
+This fork keeps the core Flagrum experience intact while modernizing the project and making it easier to build and distribute from this repository.
+
+- Upgraded the solution to the .NET 10 SDK and current project target frameworks.
+- Added fork-owned validation and release workflow updates for `Tzeentchnet/Flagrum`.
+- Replaced the unavailable private premium package with a local free-mode stub so the solution builds openly.
 
 ## Features
+The core features of Flagrum are unchanged.
 
 ### Asset Management
 
@@ -25,14 +33,6 @@ View and manage Steam Workshop mods, inspect workshop limits, adjust downloaded 
 
 ![Steam Workshop Mods](.github/images/readme/workshop.jpg)
 
-## Changes From Upstream
-
-This fork keeps the core Flagrum experience intact while modernizing the project and making it easier to build and distribute from this repository.
-
-- Upgraded the solution to the .NET 10 SDK and current project target frameworks.
-- Added fork-owned validation and release workflow updates for `Tzeentchnet/Flagrum`.
-- Replaced the unavailable private premium package with a local free-mode stub so the solution builds openly.
-- Cleaned up fork distribution docs and removed legacy donation-provider branding from the app and repository assets.
 
 ## Getting Started
 

@@ -22,43 +22,43 @@
 @code{
 
     [Parameter(CaptureUnmatchedValues = true)]
-    public Dictionary<string, object> Attributes { get; set; }
+    public Dictionary<string, object>? Attributes { get; set; }
 
     /// <summary>
     /// Allows you to override the default css class of the <see cref="Item"/>'s li element, for full customization.
     /// </summary>
     [Parameter]
-    public string OverrideDefaultCssClass { get; set; }
+    public string? OverrideDefaultCssClass { get; set; }
 
     /// <summary>
     /// Allows you to override the default css class of the <see cref="Item"/>'s li element when disabled, for full customization.
     /// </summary>
     [Parameter]
-    public string OverrideDefaultDisabledCssClass { get; set; }
+    public string? OverrideDefaultDisabledCssClass { get; set; }
 
     /// <summary>
     /// Allows you to override the default css class of the <see cref="Item"/>'s li element when it contains a <see cref="SubMenu"/>, for full customization.
     /// </summary>
     [Parameter]
-    public string OverrideDefaultCssClassWithSubMenu { get; set; }
+    public string? OverrideDefaultCssClassWithSubMenu { get; set; }
 
     /// <summary>
     /// Additional css class for the <see cref="Item"/>'s li element. Use this to extend the default css.
     /// </summary>
     [Parameter]
-    public string CssClass { get; set; }
+    public string? CssClass { get; set; }
 
     /// <summary>
     /// Additional css class for the <see cref="Item"/>'s li element when disabled. Use this to extend the default css.
     /// </summary>
     [Parameter]
-    public string DisabledCssClass { get; set; }
+    public string? DisabledCssClass { get; set; }
 
     /// <summary>
     /// Additional css class for the <see cref="Item"/>'s li element when it contains a <see cref="SubMenu"/>. Use this to extend the default css.
     /// </summary>
     [Parameter]
-    public string CssClassWithSubMenu { get; set; }
+    public string? CssClassWithSubMenu { get; set; }
 
     /// <summary>
     /// The menu item's onclick handler. A <see cref="ItemClickEventArgs"/> is passed to the action.
@@ -89,7 +89,7 @@
     /// The id of the li element. This is optional.
     /// </summary>
     [Parameter]
-    public string Id { get; set; }
+    public string? Id { get; set; }
 
     /// <summary>
     /// Allows you to override the default x position offset of the submenu (i.e. the distance of the submenu from it's parent menu).
@@ -98,7 +98,7 @@
     public int? SubmenuXOffset { get; set; }
 
     [Parameter]
-    public RenderFragment ChildContent { get; set; }
+    public RenderFragment ChildContent { get; set; } = _ => { };
 
 
     protected string ClassCalc
@@ -106,17 +106,11 @@
         get
         {
             var template = settings.GetTemplate(Template);
-            string classes = null;
-            if (Enabled)
-            {
-                classes = Helpers.AppendCssClasses((OverrideDefaultCssClass ?? template.DefaultCssOverrides.MenuItemCssClass),
-                                            (CssClass ?? settings.GetTemplate(Template).MenuItemCssClass));
-            }
-            else
-            {
-                classes = Helpers.AppendCssClasses((OverrideDefaultDisabledCssClass ?? template.DefaultCssOverrides.MenuItemDisabledCssClass),
-                                            (DisabledCssClass ?? settings.GetTemplate(Template).MenuItemDisabledCssClass));
-            }
+            var classes = Enabled
+                ? Helpers.AppendCssClasses((OverrideDefaultCssClass ?? template.DefaultCssOverrides.MenuItemCssClass),
+                    (CssClass ?? settings.GetTemplate(Template).MenuItemCssClass))
+                : Helpers.AppendCssClasses((OverrideDefaultDisabledCssClass ?? template.DefaultCssOverrides.MenuItemDisabledCssClass),
+                    (DisabledCssClass ?? settings.GetTemplate(Template).MenuItemDisabledCssClass));
 
             var hasSubMenu = menuTreeTraverser.HasSubMenu(this);
             if (hasSubMenu)
@@ -131,9 +125,9 @@
     }
 
     protected ElementReference MenuItemElement { get; set; }
-    protected string Template { get; set; }
-    protected ContextMenu RootMenu { get; set; }
-    protected ContextMenuBase ParentMenu { get; set; }
+    protected string Template { get; set; } = null!;
+    protected ContextMenu RootMenu { get; set; } = null!;
+    protected ContextMenuBase ParentMenu { get; set; } = null!;
 
     protected override async Task OnInitializedAsync()
     {

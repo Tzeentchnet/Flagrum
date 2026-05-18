@@ -60,12 +60,18 @@ public partial class MainWindow
 
     private void Viewer_OnInitialized(object? sender, EventArgs e)
     {
-        ((MainViewModel)DataContext).ViewportViewModel.Viewer = (Viewport3DX)sender;
+        if (DataContext is MainViewModel mainViewModel && sender is Viewport3DX viewer)
+        {
+            mainViewModel.ViewportViewModel.Viewer = viewer;
+        }
     }
 
     private void AirspacePopup_OnInitialized(object? sender, EventArgs e)
     {
-        ((MainViewModel)DataContext).ViewportViewModel.AirspacePopup = (AirspacePopup)sender;
+        if (DataContext is MainViewModel mainViewModel && sender is AirspacePopup airspacePopup)
+        {
+            mainViewModel.ViewportViewModel.AirspacePopup = airspacePopup;
+        }
     }
 
     private void Minimize_Click(object sender, RoutedEventArgs e)

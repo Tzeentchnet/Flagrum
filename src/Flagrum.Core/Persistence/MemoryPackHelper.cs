@@ -1,6 +1,7 @@
-﻿using System.IO;
+﻿#nullable enable annotations
+
+using System.IO;
 using System.Threading.Tasks;
-using Flagrum.Core.Utilities.Extensions;
 using MemoryPack;
 using ZstdSharp;
 
@@ -12,8 +13,8 @@ public static class MemoryPackHelper
     {
         using var stream = new FileStream(path, FileMode.Create, FileAccess.Write);
         using var compressionStream = new CompressionStream(stream);
-        MemoryPackSerializer.SerializeAsync(compressionStream, data, MemoryPackSerializerOptions.Utf8)
-            .AwaitSynchronous();
+        var buffer = MemoryPackSerializer.Serialize(data, MemoryPackSerializerOptions.Utf8);
+        compressionStream.Write(buffer);
     }
 
     public static async Task SerializeCompressedAsync<T>(string path, T data)

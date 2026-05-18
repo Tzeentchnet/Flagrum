@@ -8,7 +8,6 @@ using System.Timers;
 using Flagrum.Abstractions.ModManager;
 using Flagrum.Abstractions.ModManager.Instructions;
 using Flagrum.Abstractions.ModManager.Project;
-using Flagrum.Core.Utilities;
 using Flagrum.Application.Features.ModManager.Instructions;
 using Flagrum.Application.Features.ModManager.Instructions.Abstractions;
 using Flagrum.Application.Features.ModManager.Modals;
@@ -99,7 +98,7 @@ public partial class Editor
     {
         _timer.Elapsed += (_, _) =>
         {
-            InvokeAsync(StateHasChanged);
+            _ = InvokeAsync(StateHasChanged);
             _timer.Stop();
         };
 
@@ -203,7 +202,7 @@ public partial class Editor
         HasChanged = true;
     }
 
-    private void Save()
+    private async Task Save()
     {
         if (Profile.IsGameRunning())
         {
@@ -237,42 +236,39 @@ public partial class Editor
             }
             else
             {
-                ThreadHelper.RunOnNewThread(async () =>
-                {
-                    await Task.Run(async () => await CheckConflicts(Mod,
-                        async () =>
+                await CheckConflictsAndWait(
+                    async () =>
+                    {
+                        if (ModManager.ModsState.GetActive(Mod.Identifier))
                         {
-                            if (ModManager.ModsState.GetActive(Mod.Identifier))
-                            {
-                                var mod = ModManager.Projects[Mod.Identifier];
-                                await ModManagerService.DisableMod(mod);
-                            }
+                            var mod = ModManager.Projects[Mod.Identifier];
+                            await ModManagerService.DisableMod(mod);
+                        }
 
-                            if (HasChanged)
-                            {
-                                await ModManagerService.SaveBuildList(Mod);
-                            }
-
-                            await ModManagerService.EnableMod(Mod);
-
-                            Navigation.NavigateTo("/");
-                        },
-                        async () =>
+                        if (HasChanged)
                         {
-                            if (ModManager.ModsState.GetActive(Mod.Identifier))
-                            {
-                                var mod = ModManager.Projects[Mod.Identifier];
-                                await ModManagerService.DisableMod(mod);
-                            }
+                            await ModManagerService.SaveBuildList(Mod);
+                        }
 
-                            if (HasChanged)
-                            {
-                                await ModManagerService.SaveBuildList(Mod);
-                            }
+                        await ModManagerService.EnableMod(Mod);
 
-                            Navigation.NavigateTo("/");
-                        }));
-                });
+                        Navigation.NavigateTo("/");
+                    },
+                    async () =>
+                    {
+                        if (ModManager.ModsState.GetActive(Mod.Identifier))
+                        {
+                            var mod = ModManager.Projects[Mod.Identifier];
+                            await ModManagerService.DisableMod(mod);
+                        }
+
+                        if (HasChanged)
+                        {
+                            await ModManagerService.SaveBuildList(Mod);
+                        }
+
+                        Navigation.NavigateTo("/");
+                    });
             }
         }
         else
@@ -288,22 +284,26 @@ public partial class Editor
             }
             else
             {
-                ThreadHelper.RunOnNewThread(async () =>
-                {
-                    await Task.Run(async () => await CheckConflicts(Mod,
-                        async () =>
-                        {
-                            await ModManagerService.EnableMod(Mod);
-                            Navigation.NavigateTo("/");
-                        },
-                        () =>
-                        {
-                            Navigation.NavigateTo("/");
-                            return Task.CompletedTask;
-                        }));
-                });
+                await CheckConflictsAndWait(
+                    async () =>
+                    {
+                        await ModManagerService.EnableMod(Mod);
+                        Navigation.NavigateTo("/");
+                    },
+                    () =>
+                    {
+                        Navigation.NavigateTo("/");
+                        return Task.CompletedTask;
+                    });
             }
         }
+    }
+
+    private async Task CheckConflictsAndWait(Func<Task> onYes, Func<Task> onNo)
+    {
+        var taskId = await CheckConflicts(Mod, onYes, onNo);
+        await TaskCompletionSources[taskId].Task;
+        TaskCompletionSources.Remove(taskId);
     }
 
     private void ClearCache()
@@ -316,12 +316,16 @@ public partial class Editor
 
     public void LaunchRelativePath(string relativePath)
     {
+#pragma warning disable CA1416
         var uri = Path.GetDirectoryName(Path.Combine(Profile.GameDataDirectory, relativePath))!;
         Process.Start(new ProcessStartInfo(uri) {UseShellExecute = true});
+#pragma warning restore CA1416
     }
 
     public void LaunchAbsolutePath(string path)
     {
+#pragma warning disable CA1416
         Process.Start(new ProcessStartInfo(path) {UseShellExecute = true});
+#pragma warning restore CA1416
     }
 }

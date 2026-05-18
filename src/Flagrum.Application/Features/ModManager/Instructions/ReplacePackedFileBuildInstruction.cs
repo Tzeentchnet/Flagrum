@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Threading.Tasks;
 using Flagrum.Abstractions.Archive;
 using Flagrum.Abstractions.ModManager.Instructions;
 using Flagrum.Abstractions.ModManager.Project;
@@ -47,7 +46,7 @@ public partial class ReplacePackedFileBuildInstruction : PackedAssetBuildInstruc
         }
     }
 
-    public override Task<FmodFragment> Build(EbonyArchive sourceArchive, ConcurrentDictionary<string, byte[]> imageMap)
+    public override FmodFragment Build(EbonyArchive sourceArchive, ConcurrentDictionary<string, byte[]> imageMap)
     {
         if (sourceArchive == null)
         {
@@ -72,7 +71,7 @@ public partial class ReplacePackedFileBuildInstruction : PackedAssetBuildInstruc
             sourceArchive.IsProtectedArchive,
             out _);
 
-        return Task.FromResult(new FmodFragment
+        return new FmodFragment
         {
             OriginalSize = (uint)data.Length,
             ProcessedSize = (uint)processedData.Length,
@@ -80,6 +79,6 @@ public partial class ReplacePackedFileBuildInstruction : PackedAssetBuildInstruc
             Key = original.Key,
             RelativePath = original.RelativePath,
             Data = processedData
-        });
+        };
     }
 }

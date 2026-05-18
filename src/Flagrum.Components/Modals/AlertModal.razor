@@ -15,11 +15,11 @@
 
 @code
 {
-    private AutosizeModal Modal { get; set; }
+    private AutosizeModal Modal { get; set; } = null!;
 
-    private string Title { get; set; }
-    private string Heading { get; set; }
-    private string Subtext { get; set; }
+    private string Title { get; set; } = string.Empty;
+    private string Heading { get; set; } = string.Empty;
+    private string Subtext { get; set; } = string.Empty;
     private Action? OnClose { get; set; }
     private int Width { get; set; } = 400;
     private int Height { get; set; } = 300;

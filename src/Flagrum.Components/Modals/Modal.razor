@@ -19,13 +19,13 @@
 @code
 {
     [Parameter]
-    public RenderFragment HeaderView { get; set; }
+    public RenderFragment HeaderView { get; set; } = _ => { };
 
     [Parameter]
-    public RenderFragment BodyView { get; set; }
+    public RenderFragment BodyView { get; set; } = _ => { };
 
     [Parameter]
-    public RenderFragment FooterView { get; set; }
+    public RenderFragment? FooterView { get; set; }
 
     [Parameter]
     public int Width { get; set; } = 400;
@@ -42,7 +42,9 @@
     private string Display { get; set; } = "hidden";
     private string Opacity { get; set; } = "opacity-0";
 
-    public async void Open()
+    public void Open() => _ = OpenAsync();
+
+    public async Task OpenAsync()
     {
         Display = "flex";
         StateHasChanged();
@@ -53,7 +55,9 @@
         StateHasChanged();
     }
 
-    public async void Close(Action onClose = null)
+    public void Close(Action? onClose = null) => _ = CloseAsync(onClose);
+
+    public async Task CloseAsync(Action? onClose = null)
     {
         Opacity = "opacity-0";
         StateHasChanged();

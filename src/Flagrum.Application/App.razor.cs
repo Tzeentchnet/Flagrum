@@ -20,6 +20,9 @@ public partial class App
         }
 
         // Ensure app state is updated when file indexing begins/ends
-        FileIndex.OnIsRegeneratingChanged += _ => InvokeAsync(StateHasChanged);
+        FileIndex.OnIsRegeneratingChanged += isRegenerating =>
+        {
+            _ = InvokeAsync(StateHasChanged);
+        };
     }
 }

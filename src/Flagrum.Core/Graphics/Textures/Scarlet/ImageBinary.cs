@@ -76,7 +76,7 @@ public class ImageBinary
     {
         var inputPixelData = new byte[inputStream.Length];
         inputStream.Seek(0, SeekOrigin.Begin);
-        inputStream.Read(inputPixelData, 0, inputPixelData.Length);
+        inputStream.ReadExactly(inputPixelData, 0, inputPixelData.Length);
 
         InitializeInstance(width, height, inputPixelFormat, inputPixelData: inputPixelData);
     }
@@ -95,7 +95,7 @@ public class ImageBinary
     {
         var inputPixelData = new byte[inputLength];
         inputStream.Seek(inputOffset, SeekOrigin.Begin);
-        inputStream.Read(inputPixelData, 0, inputLength);
+        inputStream.ReadExactly(inputPixelData, 0, inputLength);
 
         InitializeInstance(width, height, inputPixelFormat, inputPixelData: inputPixelData);
     }
@@ -127,7 +127,7 @@ public class ImageBinary
     {
         var inputPixelData = new byte[inputStream.Length];
         inputStream.Seek(0, SeekOrigin.Begin);
-        inputStream.Read(inputPixelData, 0, inputPixelData.Length);
+        inputStream.ReadExactly(inputPixelData, 0, inputPixelData.Length);
 
         InitializeInstance(width, height, inputPixelFormat, inputEndianness, inputPixelData: inputPixelData);
     }
@@ -147,7 +147,7 @@ public class ImageBinary
     {
         var inputPixelData = new byte[inputLength];
         inputStream.Seek(inputOffset, SeekOrigin.Begin);
-        inputStream.Read(inputPixelData, 0, inputLength);
+        inputStream.ReadExactly(inputPixelData, 0, inputLength);
 
         InitializeInstance(width, height, inputPixelFormat, inputEndianness, inputPixelData: inputPixelData);
     }
@@ -179,7 +179,7 @@ public class ImageBinary
     {
         var inputPixelData = new byte[inputStream.Length];
         inputStream.Seek(0, SeekOrigin.Begin);
-        inputStream.Read(inputPixelData, 0, inputPixelData.Length);
+        inputStream.ReadExactly(inputPixelData, 0, inputPixelData.Length);
 
         InitializeInstance(width, height, inputPixelFormat, outputFormat: outputFormat, inputPixelData: inputPixelData);
     }
@@ -199,7 +199,7 @@ public class ImageBinary
     {
         var inputPixelData = new byte[inputLength];
         inputStream.Seek(inputOffset, SeekOrigin.Begin);
-        inputStream.Read(inputPixelData, 0, inputLength);
+        inputStream.ReadExactly(inputPixelData, 0, inputLength);
 
         InitializeInstance(width, height, inputPixelFormat, outputFormat: outputFormat, inputPixelData: inputPixelData);
     }
@@ -235,7 +235,7 @@ public class ImageBinary
         PixelDataFormat outputFormat, Endian outputEndianness, Stream inputStream)
     {
         var inputPixelData = new byte[inputStream.Length];
-        inputStream.Read(inputPixelData, 0, inputPixelData.Length);
+        inputStream.ReadExactly(inputPixelData, 0, inputPixelData.Length);
 
         InitializeInstance(width, height, inputPixelFormat, inputEndianness, outputFormat, outputEndianness,
             inputPixelData);
@@ -257,7 +257,8 @@ public class ImageBinary
         PixelDataFormat outputFormat, Endian outputEndianness, Stream inputStream, int inputOffset, int inputLength)
     {
         var inputPixelData = new byte[inputLength];
-        inputStream.Read(inputPixelData, inputOffset, inputLength);
+        inputStream.Seek(inputOffset, SeekOrigin.Begin);
+        inputStream.ReadExactly(inputPixelData, 0, inputLength);
 
         InitializeInstance(width, height, inputPixelFormat, inputEndianness, outputFormat, outputEndianness,
             inputPixelData);
@@ -433,6 +434,7 @@ public class ImageBinary
     /// Generates a bitmap (ARGB8888, Indexed 4bpp, or Indexed 8bpp), using this instance's image information
     /// </summary>
     /// <returns>Generated bitmap</returns>
+#pragma warning disable CA1416
     public Bitmap GetBitmap()
     {
         return GetBitmap(0, 0);
@@ -526,6 +528,7 @@ public class ImageBinary
 
         return image.Clone(new Rectangle(0, 0, Width, Height), image.PixelFormat);
     }
+#pragma warning restore CA1416
 
     private bool IsValidPixelDataFormat(PixelDataFormat fmt)
     {

@@ -18,6 +18,8 @@ using Injectio.Attributes;
 
 namespace Flagrum.Application.Features.ModManager.Launcher;
 
+#pragma warning disable CA1416
+
 /// <summary>
 /// Handles launching the game and injecting the hook DLL.
 /// </summary>
@@ -192,3 +194,4 @@ public class GameLauncher(
         return memoryMappedFile;
     }
 }
+#pragma warning restore CA1416

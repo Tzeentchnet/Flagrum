@@ -1,5 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using System.Threading.Tasks;
 using Flagrum.Abstractions.ModManager.Instructions;
 using Flagrum.Core.Archive;
 using Flagrum.Application.Features.ModManager.Mod;
@@ -18,7 +17,7 @@ public abstract class PackedAssetBuildInstruction : PackedBuildInstruction, IPac
 
     [MemoryPackIgnore] public string DataSource { get; set; }
 
-    public virtual Task<FmodFragment> Build(EbonyArchive sourceArchive, ConcurrentDictionary<string, byte[]> imageMap)
+    public virtual FmodFragment Build(EbonyArchive sourceArchive, ConcurrentDictionary<string, byte[]> imageMap)
     {
         var data = imageMap.TryGetValue(Uri, out var value)
             ? value
@@ -28,7 +27,7 @@ public abstract class PackedAssetBuildInstruction : PackedBuildInstruction, IPac
             EbonyArchiveFile.GetProcessedData(Uri, Flags, data, 0, true,
                 out var archiveFile);
 
-        return Task.FromResult(new FmodFragment
+        return new FmodFragment
         {
             OriginalSize = (uint)data.Length,
             ProcessedSize = (uint)processedData.Length,
@@ -36,6 +35,6 @@ public abstract class PackedAssetBuildInstruction : PackedBuildInstruction, IPac
             Key = archiveFile.Key,
             RelativePath = archiveFile.RelativePath,
             Data = processedData
-        });
+        };
     }
 }

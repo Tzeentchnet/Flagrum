@@ -23,6 +23,8 @@
             return;
         }
 
+        _previousItem = Item;
+
         var bytes = Item.Data;
         Lines = Encoding.UTF8.GetString(bytes).Split('\n').ToList();
         StateHasChanged();

@@ -23,7 +23,9 @@
             </div>
             @if (IsSearching)
             {
-                <Indicator Color="BaseColor.Primary" Size="IndicatorSize.Medium" class="my-4"/>
+                <div class="my-4">
+                    <LoadingIndicator/>
+                </div>
             }
             else if (EncapsulatedItems != null)
             {

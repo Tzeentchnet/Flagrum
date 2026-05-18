@@ -226,6 +226,7 @@ public class ProfileService : IProfileService
 
     public bool IsGameRunning()
     {
+#pragma warning disable CA1416
         if (!string.IsNullOrWhiteSpace(Current.GamePath))
         {
             var directory = Path.GetDirectoryName(Current.GamePath);
@@ -248,6 +249,7 @@ public class ProfileService : IProfileService
         }
 
         return false;
+#pragma warning restore CA1416
     }
 
     public EbonyArchive OpenArchive(string absolutePath)
@@ -319,6 +321,7 @@ public class ProfileService : IProfileService
 
     private void TrySetSteamExePath()
     {
+#pragma warning disable CA1416
         try
         {
             var key64 = Registry.LocalMachine.OpenSubKey(Steam64);
@@ -342,6 +345,7 @@ public class ProfileService : IProfileService
             // Don't want a failed Steam path to take out the whole app
             // It's not that important
         }
+#pragma warning restore CA1416
     }
 
     /// <summary>

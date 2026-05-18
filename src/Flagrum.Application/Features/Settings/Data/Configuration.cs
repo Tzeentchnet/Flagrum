@@ -53,7 +53,7 @@ public partial class Configuration : IConfiguration
     public Configuration(DummyService dummyService)
     {
         // Migrate from the old configuration DB if applicable
-        ConfigurationMigration.RunAsync().AwaitSynchronous();
+        ConfigurationMigration.Run();
 
         // Load the persisted configuration from disk
         if (File.Exists(Path))
@@ -115,6 +115,7 @@ public partial class Configuration : IConfiguration
     {
         get
         {
+#pragma warning disable CA1416
             var clientIdString = (string)Registry.GetValue(ClientIdKey, "", null);
             if (clientIdString == null)
             {
@@ -123,6 +124,7 @@ public partial class Configuration : IConfiguration
             }
 
             return new Guid(clientIdString);
+#pragma warning restore CA1416
         }
     }
 

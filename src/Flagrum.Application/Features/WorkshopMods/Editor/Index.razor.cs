@@ -51,7 +51,7 @@ public partial class Index : ComponentBase
     private PromptModal DeleteModal { get; set; }
     public string ModelReplacementPresetName { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         WorkshopModBuildContext = new WorkshopModBuildContext(TextureConverter, StateHasChanged);
         ModTypes = Enum.GetValues<WorkshopModType>().ToDictionary(t => (int)t, t => L[t.ToString()].Value);
@@ -60,11 +60,11 @@ public partial class Index : ComponentBase
 
         if (Mod == null)
         {
-            InitializeNewMod();
+            await InitializeNewModAsync();
         }
         else
         {
-            InitializeExistingMod();
+            await InitializeExistingModAsync();
         }
 
         ModTargets = BinmodTypeHelper.GetTargets(Mod.Type)
@@ -86,7 +86,7 @@ public partial class Index : ComponentBase
         StateHasChanged();
     }
 
-    private void InitializeNewMod()
+    private async Task InitializeNewModAsync()
     {
         IsNew = true;
         WorkshopModBuildContext.Flags |=
@@ -96,7 +96,7 @@ public partial class Index : ComponentBase
         var currentPreviewPath = $"{IOHelper.GetWebRoot()}\\images\\current_preview.png";
         File.Copy(defaultPreviewPath, currentPreviewPath, true);
         var previewBytes = File.ReadAllBytes(defaultPreviewPath);
-        WorkshopModBuildContext.ProcessPreviewImage(previewBytes);
+        await WorkshopModBuildContext.ProcessPreviewImageAsync(previewBytes);
 
         Mod = new Binmod
         {
@@ -107,7 +107,7 @@ public partial class Index : ComponentBase
         Mod.Path = $"{Profile.BinmodDirectory}\\{Mod.Uuid}.ffxvbinmod";
     }
 
-    private void InitializeExistingMod()
+    private async Task InitializeExistingModAsync()
     {
         ModelNames = BinmodTypeHelper.GetModelNames(Mod.Type, Mod.Target);
         ModelCount = BinmodTypeHelper.GetModelCount(Mod.Type, Mod.Target);
@@ -122,7 +122,7 @@ public partial class Index : ComponentBase
 
         if (previewBytes.Length > 0)
         {
-            WorkshopModBuildContext.ProcessPreviewImage(previewBytes);
+            await WorkshopModBuildContext.ProcessPreviewImageAsync(previewBytes);
             File.WriteAllBytes($"{IOHelper.GetWebRoot()}\\images\\current_preview.png", previewBytes);
         }
         else
@@ -131,14 +131,14 @@ public partial class Index : ComponentBase
             var currentPreviewPath = $"{IOHelper.GetWebRoot()}\\images\\current_preview.png";
             File.Copy(defaultPreviewPath, currentPreviewPath, true);
             previewBytes = File.ReadAllBytes(defaultPreviewPath);
-            WorkshopModBuildContext.ProcessPreviewImage(previewBytes);
+            await WorkshopModBuildContext.ProcessPreviewImageAsync(previewBytes);
         }
 
         if (Mod.Type == (int)WorkshopModType.StyleEdit)
         {
             if (Mod.HasThumbnailPng(out var thumbnailBytes))
             {
-                WorkshopModBuildContext.ProcessThumbnailImage(thumbnailBytes);
+                await WorkshopModBuildContext.ProcessThumbnailImageAsync(thumbnailBytes);
                 File.WriteAllBytes($"{IOHelper.GetWebRoot()}\\images\\current_thumbnail.png", thumbnailBytes);
             }
             else
@@ -146,7 +146,7 @@ public partial class Index : ComponentBase
                 try
                 {
                     var jpgBytes = TextureConverter.ToJpeg(thumbnailBytes);
-                    WorkshopModBuildContext.ProcessThumbnailImage(jpgBytes);
+                    await WorkshopModBuildContext.ProcessThumbnailImageAsync(jpgBytes);
                     File.WriteAllBytes($"{IOHelper.GetWebRoot()}\\images\\current_thumbnail.png", jpgBytes);
                 }
                 catch
@@ -154,7 +154,7 @@ public partial class Index : ComponentBase
                     // Must be a mod made with a previous version of Flagrum if the Btex conversion is failing
                     var defaultThumbnailPath = $"{IOHelper.GetExecutingDirectory()}\\Resources\\default.png";
                     var pngBytes = File.ReadAllBytes(defaultThumbnailPath);
-                    WorkshopModBuildContext.ProcessThumbnailImage(pngBytes);
+                    await WorkshopModBuildContext.ProcessThumbnailImageAsync(pngBytes);
                     File.WriteAllBytes($"{IOHelper.GetWebRoot()}\\images\\current_thumbnail.png", pngBytes);
                 }
             }
@@ -175,16 +175,14 @@ public partial class Index : ComponentBase
     {
         await PlatformService.OpenFileDialogAsync(
             "Image Files|*.png;*.jpg;*.jpeg;*.tif;*.tiff;*.gif",
-            path =>
+            async path =>
             {
-                WorkshopModBuildContext.ProcessPreviewImage(path, async () =>
+                await WorkshopModBuildContext.ProcessPreviewImageAsync(path, async () =>
                 {
                     // This jank is required or the UI won't update the image if the value hasn't changed
                     ImageName = ImageName == "current_preview" ? "Current_Preview" : "current_preview";
                     await InvokeAsync(StateHasChanged);
                 });
-
-                return Task.CompletedTask;
             });
     }
 
@@ -192,16 +190,14 @@ public partial class Index : ComponentBase
     {
         await PlatformService.OpenFileDialogAsync(
             "Image Files|*.png;*.jpg;*.jpeg;*.tif;*.tiff;*.gif",
-            path =>
+            async path =>
             {
-                WorkshopModBuildContext.ProcessThumbnailImage(path, async () =>
+                await WorkshopModBuildContext.ProcessThumbnailImageAsync(path, async () =>
                 {
                     // This jank is required or the UI won't update the image if the value hasn't changed
                     ThumbnailName = ThumbnailName == "current_thumbnail" ? "Current_Thumbnail" : "current_thumbnail";
                     await InvokeAsync(StateHasChanged);
                 });
-
-                return Task.CompletedTask;
             });
     }
 
@@ -219,7 +215,7 @@ public partial class Index : ComponentBase
         Navigation.NavigateTo("/mod");
     }
 
-    private void Save()
+    private async Task Save()
     {
         if (Mod.Type == (int)WorkshopModType.Character)
         {
@@ -231,16 +227,16 @@ public partial class Index : ComponentBase
         if (WorkshopModBuildContext.Flags.HasFlag(WorkshopModBuildContextFlags.NeedsBuild))
         {
             SetLoading(L["BuildingMod"]);
-            BuildAsync();
+            await BuildAsync();
         }
         else
         {
             SetLoading(L["Saving"]);
-            SaveAsync();
+            await SaveAsync();
         }
     }
 
-    private async void SaveAsync()
+    private async Task SaveAsync()
     {
         using var archive = new EbonyArchive(Mod.Path);
 
@@ -282,7 +278,7 @@ public partial class Index : ComponentBase
         Navigation.NavigateTo("/mod");
     }
 
-    private async void BuildAsync()
+    private async Task BuildAsync()
     {
         await WorkshopModBuildContext.WaitForBuildData(Mod.Type == (int)WorkshopModType.StyleEdit);
 
@@ -378,7 +374,7 @@ public partial class Index : ComponentBase
             async path =>
             {
                 FmdFileNames[index] = path.Split('\\', '/').Last();
-                WorkshopModBuildContext.ProcessFmd(index, path);
+                await WorkshopModBuildContext.ProcessFmdAsync(index, path);
                 Mod.ModDirectoryName = Mod.Uuid;
                 Mod.ModelName = path.Split('\\', '/').Last().Split('.')[0].ToSafeString();
 
@@ -399,7 +395,7 @@ public partial class Index : ComponentBase
                     var currentThumbnailPath = $"{IOHelper.GetWebRoot()}\\images\\current_thumbnail.png";
                     File.Copy(defaultThumbnailPath, currentThumbnailPath, true);
                     var thumbnailBytes = await File.ReadAllBytesAsync(defaultThumbnailPath);
-                    WorkshopModBuildContext.ProcessThumbnailImage(thumbnailBytes);
+                    await WorkshopModBuildContext.ProcessThumbnailImageAsync(thumbnailBytes);
 
                     // This jank is required or the UI won't update the image if the value hasn't changed
                     ThumbnailName = ThumbnailName == "current_thumbnail" ? "Current_Thumbnail" : "current_thumbnail";

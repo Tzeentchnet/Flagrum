@@ -44,13 +44,13 @@ else
     public bool IsReadOnly { get; set; }
 
     [Parameter]
-    public string Placeholder { get; set; }
+    public string? Placeholder { get; set; }
 
     [Parameter]
-    public string Class { get; set; }
+    public string? Class { get; set; }
     
     [Parameter]
-    public Action<KeyboardEventArgs> OnKeyUp { get; set; }
+    public Action<KeyboardEventArgs>? OnKeyUp { get; set; }
 
     private string Style => Size switch
     {
@@ -60,10 +60,10 @@ else
         _ => ""
         };
 
-    protected override bool TryParseValueFromString(string value, out string result, out string validationErrorMessage)
+    protected override bool TryParseValueFromString(string? value, out string result, out string validationErrorMessage)
     {
-        result = value;
-        validationErrorMessage = null;
+        result = value ?? string.Empty;
+        validationErrorMessage = null!;
         return true;
     }
 

@@ -27,9 +27,10 @@ public static class Cryptography
         var encryptedData = new byte[encryptedSize];
         Buffer.BlockCopy(data, 0, unencryptedData, 0, data.Length);
 
-        var aes = new AesManaged {Key = _aesKey};
+        using var aes = Aes.Create();
+        aes.Key = _aesKey;
         aes.GenerateIV();
-        var encryptor = aes.CreateEncryptor();
+        using var encryptor = aes.CreateEncryptor();
         encryptor.TransformBlock(unencryptedData, 0, unencryptedSize, encryptedData, 0);
 
         Buffer.BlockCopy(aes.IV, 0, encryptedData, unencryptedSize, aes.IV.Length);
@@ -47,19 +48,17 @@ public static class Cryptography
         var iv = new byte[16];
         Array.Copy(data, size, iv, 0, 16);
 
-        var aes = new AesManaged
-        {
-            Key = _aesKey,
-            IV = iv,
-            Padding = PaddingMode.None
-        };
+        using var aes = Aes.Create();
+        aes.Key = _aesKey;
+        aes.IV = iv;
+        aes.Padding = PaddingMode.None;
 
         var decryptedBuffer = new byte[size];
         var encryptedBuffer = new byte[size];
 
         Array.Copy(data, 0, encryptedBuffer, 0, size);
 
-        var decryptor = aes.CreateDecryptor();
+        using var decryptor = aes.CreateDecryptor();
         decryptor.TransformBlock(encryptedBuffer, 0, size, decryptedBuffer, 0);
 
         return decryptedBuffer;

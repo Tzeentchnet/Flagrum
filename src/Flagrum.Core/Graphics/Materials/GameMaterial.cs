@@ -10,7 +10,7 @@ namespace Flagrum.Core.Graphics.Materials;
 public class GameMaterial : GraphicsBinary
 {
     public ulong NameOffset { get; set; }
-    public ushort Unknown { get; set; }
+    public new ushort Unknown { get; set; }
 
     // These are the counts of the objects in the lists that map to this material
     public ushort UniformCount { get; set; }

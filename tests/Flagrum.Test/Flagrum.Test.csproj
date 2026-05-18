@@ -23,6 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\src\Flagrum.Application\Flagrum.Application.csproj"/>
         <ProjectReference Include="..\..\src\Flagrum.Core\Flagrum.Core.csproj"/>
     </ItemGroup>
 

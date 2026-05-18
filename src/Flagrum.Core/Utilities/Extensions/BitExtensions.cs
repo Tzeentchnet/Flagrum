@@ -6,10 +6,10 @@ public class BitExtensions
 {
     public static bool BitTest64(ulong address, int position)
     {
-        if (position is < 0 or > 64)
+        if (position is < 0 or > 63)
         {
             throw new ArgumentOutOfRangeException(nameof(position), position,
-                "Bit position of a 64-bit integer must be between 0 and 64");
+            "Bit position of a 64-bit integer must be between 0 and 63");
         }
 
         var bytes = BitConverter.GetBytes(address);
@@ -29,7 +29,9 @@ public class BitExtensions
             3 => 8,
             2 => 4,
             1 => 2,
-            0 => 1
+            0 => 1,
+            _ => throw new ArgumentOutOfRangeException(nameof(positionInByte), positionInByte,
+                "Bit position of a byte must be between 0 and 7")
         };
     }
 }

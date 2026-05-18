@@ -11,17 +11,17 @@
 @code
 {
     [Parameter]
-    public string Text { get; set; }
+    public string? Text { get; set; }
 
     [Parameter]
     public bool IsLoading { get; set; }
 
     [Parameter]
-    public RenderFragment ChildContent { get; set; }
+    public RenderFragment ChildContent { get; set; } = _ => { };
 
     [Parameter]
-    public string CssClass { get; set; }
+    public string? CssClass { get; set; }
 
     [Parameter]
-    public string Id { get; set; }
+    public string? Id { get; set; }
 }

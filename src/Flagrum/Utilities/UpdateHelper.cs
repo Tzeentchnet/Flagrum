@@ -13,7 +13,7 @@ public static class UpdateHelper
         {
             SplashViewModel.Instance.SetLoadingText("Checking for updates");
 
-            var github = new GithubSource("https://github.com/Kizari/Flagrum", null, false);
+            var github = new GithubSource("https://github.com/Tzeentchnet/Flagrum", null, false);
             var manager = new UpdateManager(github);
             var newVersion = await manager.CheckForUpdatesAsync();
             

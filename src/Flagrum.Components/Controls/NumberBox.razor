@@ -32,18 +32,18 @@
         _ => ""
         };
 
-    protected override bool TryParseValueFromString(string value, out int? result, out string validationErrorMessage)
+    protected override bool TryParseValueFromString(string? value, out int? result, out string validationErrorMessage)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
             result = null;
-            validationErrorMessage = null;
+            validationErrorMessage = null!;
             return true;
         }
 
         if (int.TryParse(value, out var parsedInt))
         {
-            validationErrorMessage = null;
+            validationErrorMessage = null!;
             result = parsedInt;
             return true;
         }

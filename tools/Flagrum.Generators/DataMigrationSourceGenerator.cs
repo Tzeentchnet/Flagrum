@@ -37,17 +37,17 @@ public class DataMigrationSourceGenerator : IIncrementalGenerator
           namespace {{Namespace}};
 
           [System.AttributeUsage(System.AttributeTargets.Class)]
-          public class {{AttributeName}} : System.Attribute
+          internal class {{AttributeName}} : System.Attribute
           {
               public {{AttributeName}}(int order) { }
           }
 
-          public enum MigrationScope { Application, Profile }
+          internal enum MigrationScope { Application, Profile }
           
-          public enum MigrationStepMode { Mandatory, Retry, Warn }
+          internal enum MigrationStepMode { Mandatory, Retry, Warn }
 
           [System.AttributeUsage(System.AttributeTargets.Method)]
-          public class {{StepAttributeName}} : System.Attribute
+          internal class {{StepAttributeName}} : System.Attribute
           {
               public {{StepAttributeName}}(int order, string guid, MigrationScope scope, MigrationStepMode mode = MigrationStepMode.Mandatory, string warning = null) { }
           }
@@ -219,14 +219,14 @@ public class DataMigrationSourceGenerator : IIncrementalGenerator
 
                              namespace {{Namespace}};
 
-                             public static class SteppedMigrationHelper
+                             internal static class SteppedMigrationHelper
                              {
-                                 public static System.Collections.Generic.HashSet<System.Guid> ApplicationSteps =>
+                                 internal static System.Collections.Generic.HashSet<System.Guid> ApplicationSteps =>
                                  [
                                      {{string.Join(",\r\n        ", allSteps.Where(s => s.Scope == MigrationScope.Application).Select(s => $"{s.Namespace}.{s.ClassName}.{s.MethodName}Id"))}}
                                  ];
                                  
-                                 public static System.Collections.Generic.HashSet<System.Guid> ProfileSteps =>
+                                 internal static System.Collections.Generic.HashSet<System.Guid> ProfileSteps =>
                                  [
                                      {{string.Join(",\r\n        ", allSteps.Where(s => s.Scope == MigrationScope.Profile).Select(s => $"{s.Namespace}.{s.ClassName}.{s.MethodName}Id"))}}
                                  ];

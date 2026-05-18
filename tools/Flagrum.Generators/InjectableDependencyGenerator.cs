@@ -24,7 +24,7 @@ public class InjectableDependencyGenerator : IIncrementalGenerator
           namespace {{Namespace}};
 
           [System.AttributeUsage(System.AttributeTargets.Class)]
-          public class {{AttributeName}} : System.Attribute
+          internal class {{AttributeName}} : System.Attribute
           {
               public Microsoft.Extensions.DependencyInjection.ServiceLifetime Lifetime { get; }
               
@@ -35,7 +35,7 @@ public class InjectableDependencyGenerator : IIncrementalGenerator
           }
           
           [System.AttributeUsage(System.AttributeTargets.Field)]
-          public class {{InjectAttributeName}} : System.Attribute;
+          internal class {{InjectAttributeName}} : System.Attribute;
           """;
 
     private const string ExtensionSourceCode =
@@ -46,9 +46,9 @@ public class InjectableDependencyGenerator : IIncrementalGenerator
           
           namespace {{Namespace}};
           
-          public static class FlagrumGeneratorsServiceExtensions
+          internal static class FlagrumGeneratorsServiceExtensions
           {
-              public static IServiceCollection Add%%PROJECTNAME%%(this IServiceCollection services)
+              internal static IServiceCollection Add%%PROJECTNAME%%(this IServiceCollection services)
               {
           %%PLACEHOLDER%%
           

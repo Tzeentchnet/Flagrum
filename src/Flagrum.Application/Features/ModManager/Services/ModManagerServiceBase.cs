@@ -12,7 +12,6 @@ using Flagrum.Core.Archive;
 using Flagrum.Core.Graphics.Textures.Luminous;
 using Flagrum.Core.Persistence;
 using Flagrum.Core.Utilities;
-using Flagrum.Core.Utilities.Extensions;
 using Flagrum.Application.Features.AssetExplorer.Data;
 using Flagrum.Application.Features.ModManager.Data;
 using Flagrum.Application.Features.ModManager.Instructions;
@@ -275,7 +274,7 @@ public abstract class ModManagerServiceBase
                          && (file.FileLastModified != File.GetLastWriteTime(file.FilePath).Ticks
                              || !File.Exists(cachePath))))
                     {
-                        var fragment = file.Build(sourceArchive, imageMap).AwaitSynchronous();
+                        var fragment = file.Build(sourceArchive, imageMap);
                         fragment?.Write(cachePath);
                     }
                 });

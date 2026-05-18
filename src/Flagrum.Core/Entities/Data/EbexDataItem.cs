@@ -1165,7 +1165,7 @@ public class DataItem : IItem, IDisposable, IEnumerable<DataItem>, IEnumerable
 
             DocumentInterface.DocumentContainer.endDisposeDataItem(this);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // DocumentInterface.DocumentContainer.LogAppendCurrentParagraphParse(
             //     "<Span Foreground=\"Red\">DataItem.Dispose : " + ex.Message + "</Span><LineBreak />");

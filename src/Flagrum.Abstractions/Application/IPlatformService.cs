@@ -16,7 +16,7 @@ public interface IPlatformService
     void Update3DViewportBindings(ModifierKeys rotateModifierKey, MouseAction rotateMouseAction,
         ModifierKeys panModifierKey, MouseAction panMouseAction);
 
-    string GetFmodPath();
+    string? GetFmodPath();
     void ClearFmodPath();
     void SetClipboardText(string text);
 }

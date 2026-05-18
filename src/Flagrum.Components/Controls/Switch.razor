@@ -9,12 +9,12 @@
     public bool IsEnabled { get; set; }
 
     [Parameter]
-    public Action<bool> OnChange { get; set; }
+    public Action<bool>? OnChange { get; set; }
 
     private void Change(ChangeEventArgs e)
     {
-        var newValue = (bool)e.Value;
+        var newValue = e.Value is bool value && value;
         IsEnabled = newValue;
-        OnChange(newValue);
+        OnChange?.Invoke(newValue);
     }
 }

@@ -14,10 +14,10 @@
 @code
 {
     [Parameter]
-    public IDictionary<int, string> Values { get; set; }
+    public IDictionary<int, string> Values { get; set; } = new Dictionary<int, string>();
 
     [Parameter]
-    public Action<int> OnChange { get; set; }
+    public Action<int>? OnChange { get; set; }
 
     [Parameter]
     public int Value { get; set; }
@@ -26,10 +26,10 @@
     public EventCallback<int> ValueChanged { get; set; }
 
     [Parameter]
-    public string CssClass { get; set; }
+    public string? CssClass { get; set; }
 
     [Parameter]
-    public string Placeholder { get; set; }
+    public string? Placeholder { get; set; }
 
     private async Task OnOptionSelected(ChangeEventArgs e)
     {

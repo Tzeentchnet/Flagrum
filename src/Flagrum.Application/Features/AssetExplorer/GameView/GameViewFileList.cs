@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Timers;
 using Flagrum.Abstractions;
 using Flagrum.Abstractions.AssetExplorer;
 using Flagrum.Application.Features.AssetExplorer.Base;
@@ -9,8 +8,6 @@ namespace Flagrum.Application.Features.AssetExplorer.GameView;
 
 public class GameViewFileList : FileList
 {
-    private Timer _timer;
-
     protected override void OnInitialized()
     {
         if (FileIndex.IsRegenerating)

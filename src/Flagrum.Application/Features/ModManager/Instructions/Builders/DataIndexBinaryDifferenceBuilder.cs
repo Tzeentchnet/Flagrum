@@ -73,7 +73,7 @@ public partial class DataIndexBinaryDifferenceBuilder
 
             return GenerateDifference(original, modified);
         }
-        catch (Exception exception)
+        catch
         {
             // If this fails for any reason (most likely the reader not yet supporting all permutations of the binary)
             // then just return null and the builder won't store the difference on disk

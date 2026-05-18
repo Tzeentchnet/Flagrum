@@ -11,7 +11,7 @@ namespace Flagrum.Application.Migrations
 {
     [DbContext(typeof(ConfigurationDbContext))]
     [Migration("20230214140408_init")]
-    partial class init
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

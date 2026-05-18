@@ -8,9 +8,9 @@
 
 @code
 {
-    [CascadingParameter] public ModTypeButtonGroup Parent { get; set; }
+    [CascadingParameter] public ModTypeButtonGroup Parent { get; set; } = null!;
 
-    [Parameter] public string Text { get; set; }
+    [Parameter] public string Text { get; set; } = string.Empty;
 
     [Parameter] public int Value { get; set; }
 

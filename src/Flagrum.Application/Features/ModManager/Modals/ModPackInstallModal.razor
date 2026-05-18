@@ -39,11 +39,12 @@
         Modal.Close();
     }
 
-    public Task<bool> TryGetResult(IEnumerable<FlagrumMod> mods, out IEnumerable<FlagrumMod> result)
+    public async Task<IEnumerable<FlagrumMod>> GetSelection(IEnumerable<FlagrumMod> mods)
     {
         _selectedMods = new List<FlagrumMod>();
         _mods = mods;
-        return Modal.TryGetResult(out result);
+        var result = await Modal.TryGetResultAsync();
+        return result.Success ? result.Result : null;
     }
 
     private void SetModState(FlagrumMod mod, bool state)

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
@@ -12,14 +11,11 @@ using Flagrum.Abstractions;
 using Flagrum.Services;
 using Flagrum.Utilities;
 using HelixToolkit.SharpDX.Core;
-using HelixToolkit.SharpDX.Core.Animations;
 using HelixToolkit.SharpDX.Core.Model.Scene;
 using HelixToolkit.Wpf.SharpDX;
 using HelixToolkit.Wpf.SharpDX.Controls;
 using PropertyChanged.SourceGenerator;
 using Camera = HelixToolkit.Wpf.SharpDX.Camera;
-using Geometry3D = HelixToolkit.SharpDX.Core.Geometry3D;
-using Material = HelixToolkit.Wpf.SharpDX.Material;
 using PerspectiveCamera = HelixToolkit.Wpf.SharpDX.PerspectiveCamera;
 
 namespace Flagrum.Main;
@@ -29,13 +25,10 @@ public partial class ViewportViewModel : ObservableObject, IDisposable
     private readonly List<BoneSkinMeshNode> _armatureNodes = new();
     private readonly CompositionTargetEx _compositeHelper = new();
 
-    private NodeAnimationUpdater? _animationUpdater;
     [Notify] private Camera? _camera;
     [Notify] private IEffectsManager? _effectsManager;
 
     [Notify] private bool _isViewportVisible;
-    private Material? _material;
-    private Geometry3D? _mesh;
     [Notify] private SceneNodeGroupModel3D? _modelGroup;
 
     private int _viewportHeight;
@@ -146,10 +139,5 @@ public partial class ViewportViewModel : ObservableObject, IDisposable
         }
 
         GC.SuppressFinalize(this);
-    }
-
-    private void CompositeHelper_Rendering(object? sender, RenderingEventArgs e)
-    {
-        _animationUpdater?.Update(Stopwatch.GetTimestamp(), Stopwatch.Frequency);
     }
 }

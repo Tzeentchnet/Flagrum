@@ -7,6 +7,7 @@ using Flagrum.Application.Persistence.Entities;
 using Flagrum.Application.Persistence.Entities.ModManager;
 using Flagrum.Application.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Flagrum.Application.Persistence;
 
@@ -55,7 +56,12 @@ public class FlagrumDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite($"Data Source={_databasePath};", options => { options.CommandTimeout(180); });
+        optionsBuilder
+            .UseSqlite($"Data Source={_databasePath};", options => { options.CommandTimeout(180); })
+            .ConfigureWarnings(warnings =>
+            {
+                warnings.Ignore(RelationalEventId.PendingModelChangesWarning);
+            });
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -77,7 +83,13 @@ public class FlagrumDbContext : DbContext
         }
 
         using var command = connection.CreateCommand();
-        command.CommandText = $"SELECT name FROM sqlite_master WHERE type='table' AND name='{tableName}'";
+        command.CommandText = "SELECT name FROM sqlite_master WHERE type='table' AND name=$tableName";
+
+        var tableNameParameter = command.CreateParameter();
+        tableNameParameter.ParameterName = "$tableName";
+        tableNameParameter.Value = tableName;
+        command.Parameters.Add(tableNameParameter);
+
         return command.ExecuteScalar() != null;
     }
 }

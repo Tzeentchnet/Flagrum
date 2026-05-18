@@ -10,7 +10,6 @@ public class StringBuffer : IDisposable
     private readonly BinaryReader _reader;
     private readonly MemoryStream _stream;
     private readonly BinaryWriter _writer;
-    private long _offset;
     private readonly Dictionary<string, long> _offsets = new();
 
     public StringBuffer()

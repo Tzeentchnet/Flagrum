@@ -120,7 +120,7 @@ public class JenovaApplicationConfiguration
                 return true;
             }
         }
-        catch (IOException ex) { }
+        catch (IOException) { }
 
         return false;
     }

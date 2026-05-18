@@ -39,7 +39,7 @@
             </div>
             <div class="flex-grow"></div>
             <Button Icon="add" Text=@Localizer["CreateMod"] CssClass="mr-4"
-                    OnClick="@(() => ModCardModal.Open(Guid.Empty))"/>
+                    OnClickAsync="@(() => ModCardModal.Open(Guid.Empty))"/>
             <Button Icon="upload" Text=@Localizer["InstallFromZip"] OnClickAsync="Install"/>
             <div
                 class="row rounded text-sm font-bold text-white pl-1 pr-1.5 pt-1 pb-1 ml-4 cursor-pointer select-none bg-curseforge-dark hover:bg-curseforge transition-colors"

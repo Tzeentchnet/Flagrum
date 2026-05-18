@@ -15,21 +15,21 @@
 
 @code
 {
-    [Parameter] public IStringLocalizer Localizer { get; set; }
+    [Parameter] public IStringLocalizer? Localizer { get; set; }
 
-    [Parameter] public string LocalizerPrefix { get; set; }
+    [Parameter] public string LocalizerPrefix { get; set; } = string.Empty;
 
-    [Parameter] public string Style { get; set; }
+    [Parameter] public string? Style { get; set; }
 
     private void OnChange(ChangeEventArgs e)
     {
-        CurrentValueAsString = e.Value.ToString();
+        CurrentValueAsString = e.Value?.ToString();
     }
 
-    protected override bool TryParseValueFromString(string value, out TEnum result, out string validationErrorMessage)
+    protected override bool TryParseValueFromString(string? value, out TEnum result, out string validationErrorMessage)
     {
-        result = (TEnum)Enum.Parse(typeof(TEnum), value);
-        validationErrorMessage = null;
+        result = (TEnum)Enum.Parse(typeof(TEnum), value ?? string.Empty);
+        validationErrorMessage = null!;
         return true;
     }
 }

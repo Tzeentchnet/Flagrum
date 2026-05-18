@@ -2,6 +2,8 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Timers;
 using Flagrum.Core.Utilities.Extensions;
 using Microsoft.Win32;
@@ -15,9 +17,11 @@ public class VersionHelper
     private const string VersionTimeKey =
         @"HKEY_CURRENT_USER\Software\Flagrum\CLASSES\CLSID\{8D96FAAC-9E52-4C08-BE73-6BCD845F834D}";
 
-    private readonly Timer _longTimer = new(TimeSpan.FromHours(24));
+    private readonly System.Timers.Timer _longTimer = new(TimeSpan.FromHours(24));
 
-    private readonly Timer _timer = new(TimeSpan.FromSeconds(60));
+    private readonly System.Timers.Timer _timer = new(TimeSpan.FromSeconds(60));
+
+    private int _isCheckingVersion;
 
     public VersionHelper()
     {
@@ -58,7 +62,17 @@ public class VersionHelper
         _timer.Start();
     }
 
-    private async void OnTimerElapsed(object? sender, ElapsedEventArgs? e)
+    private void OnTimerElapsed(object? sender, ElapsedEventArgs? e)
+    {
+        if (Interlocked.Exchange(ref _isCheckingVersion, 1) == 1)
+        {
+            return;
+        }
+
+        _ = CheckLatestVersionAsync();
+    }
+
+    private async Task CheckLatestVersionAsync()
     {
         try
         {
@@ -68,7 +82,7 @@ public class VersionHelper
             client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Mozilla", "5.0"));
             var response =
                 await client.GetFromJsonAsync<GitHubLatestResponse>(
-                    "https://api.github.com/repos/Kizari/Flagrum/releases/latest");
+                    "https://api.github.com/repos/Tzeentchnet/Flagrum/releases/latest");
             if (response != null)
             {
                 var current = GetVersionFromRegistry();
@@ -84,6 +98,10 @@ public class VersionHelper
         catch
         {
             // Couldn't get the version, try again in a minute
+        }
+        finally
+        {
+            Interlocked.Exchange(ref _isCheckingVersion, 0);
         }
     }
 

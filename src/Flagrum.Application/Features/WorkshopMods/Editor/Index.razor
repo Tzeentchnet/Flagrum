@@ -12,7 +12,7 @@
 
             <div class="box row p-4">
                 <span class="flex-grow">@(IsNew ? L["NewMod"] : Mod.GameMenuTitle ?? Mod.WorkshopTitle)</span>
-                <Button Icon="save" Text="@L["Save"]" OnClick="Save" IsDisabled="@(!CanSave || StatsTotal > 100)"/>
+                <Button Icon="save" Text="@L["Save"]" OnClickAsync="Save" IsDisabled="@(!CanSave || StatsTotal > 100)"/>
                 <Button Icon="cancel" Text="@L["Cancel"]" CssClass="ml-3" OnClick="Cancel"/>
             </div>
 
@@ -75,7 +75,7 @@
                             </span>
                             <Button Icon="folder"
                                     Text="@L["Browse"]"
-                                    OnClick="() => SelectModel(0)"/>
+                                    OnClickAsync="() => SelectModel(0)"/>
                         </div>
                     }
                     else
@@ -86,7 +86,7 @@
                             </span>
                             <Button Icon="folder"
                                     Text="@L["Browse"]"
-                                    OnClick="() => SelectModel(0)"/>
+                                    OnClickAsync="() => SelectModel(0)"/>
                         </div>
                         <div class="box row p-4 mt-6">
                             <span class="flex-grow">
@@ -94,7 +94,7 @@
                             </span>
                             <Button Icon="folder"
                                     Text="@L["Browse"]"
-                                    OnClick="() => SelectModel(1)"/>
+                                    OnClickAsync="() => SelectModel(1)"/>
                         </div>
                     }
                 }
@@ -141,18 +141,18 @@
                                 {
                                     <Button Icon="view_in_ar"
                                             Text="@L["ChangeModel"]"
-                                            OnClick="() => SelectModel(0)"
+                                            OnClickAsync="() => SelectModel(0)"
                                             CssClass="ml-3"/>
                                 }
                                 else
                                 {
                                     <Button Icon="view_in_ar"
                                             Text="@L["ChangeModelPlaceholder", ModelNames[0]]"
-                                            OnClick="() => SelectModel(0)"
+                                            OnClickAsync="() => SelectModel(0)"
                                             CssClass="ml-3"/>
                                     <Button Icon="view_in_ar"
                                             Text="@L["ChangeModelPlaceholder", ModelNames[1]]"
-                                            OnClick="() => SelectModel(1)"
+                                            OnClickAsync="() => SelectModel(1)"
                                             CssClass="ml-3"/>
                                 }
                             }

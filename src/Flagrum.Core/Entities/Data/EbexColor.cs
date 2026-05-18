@@ -34,12 +34,6 @@ public struct Color
 
     private MILColor sRgbColor;
 
-    private float[] nativeColorValue;
-
-    private bool isFromScRgb;
-
-    private const string c_scRgbFormat = "R";
-
     /// <summary>
     /// A
     /// </summary>
@@ -268,5 +262,15 @@ public struct Color
     public static bool operator !=(Color color1, Color color2)
     {
         return !(color1 == color2);
+    }
+
+    public override bool Equals(object obj)
+    {
+        return obj is Color color && this == color;
+    }
+
+    public override int GetHashCode()
+    {
+        return scRgbColor.GetHashCode();
     }
 }

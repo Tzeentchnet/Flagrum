@@ -83,7 +83,10 @@ public sealed partial class Index : ModComponentBase
 
     protected override async Task OnInitializedAsync()
     {
-        FileIndex.OnIsRegeneratingChanged += _ => InvokeAsync(StateHasChanged);
+        FileIndex.OnIsRegeneratingChanged += isRegenerating =>
+        {
+            _ = InvokeAsync(StateHasChanged);
+        };
 
         var enabledState = Configuration.Get<int>(StateKey.CurrentEarcEnabledState);
         EnabledState = enabledState > -1 ? enabledState : 0;
@@ -122,11 +125,11 @@ public sealed partial class Index : ModComponentBase
             var fmodPath = PlatformService.GetFmodPath();
             if (fmodPath != null)
             {
-                Prompt.Title = "Install Mod";
-                Prompt.Heading = "Do you wish to install this mod?";
-                Prompt.Subtext = fmodPath.Split('\\').Last();
-                Prompt.OnYes = async () => await InstallMod(fmodPath);
-                Prompt.Open();
+                Prompt.Open(
+                    "Install Mod",
+                    "Do you wish to install this mod?",
+                    fmodPath.Split('\\').Last(),
+                    onYesAsync: async () => await InstallMod(fmodPath));
                 PlatformService.ClearFmodPath();
             }
         }
@@ -191,19 +194,16 @@ public sealed partial class Index : ModComponentBase
             var result = await ModInstaller.Install(new ModInstallationRequest
             {
                 FilePath = path,
-                GetModPackSelection = async mods =>
-                    await ModPackInstallModal.TryGetResult(mods, out var selectedMods)
-                        ? selectedMods
-                        : null,
-                HandleLegacyConflicts = conflicts =>
+                GetModPackSelection = mods => ModPackInstallModal.GetSelection(mods),
+                HandleLegacyConflicts = async conflicts =>
                 {
                     LegacyConflicts = conflicts;
                     SelectedLegacyConflicts = new string[conflicts.Count(c => c.Value.Count > 1)]
                         .Select(s => new EarcConflictString {Value = s}).ToList();
-                    InvokeAsync(StateHasChanged);
                     TaskCompletionSource = new TaskCompletionSource();
-                    InvokeAsync(ConflictsModal.Open);
-                    return TaskCompletionSource.Task;
+                    await InvokeAsync(StateHasChanged);
+                    await InvokeAsync(ConflictsModal.Open);
+                    await TaskCompletionSource.Task;
                 },
                 Localizer = Localizer
             });
@@ -262,6 +262,7 @@ public sealed partial class Index : ModComponentBase
 
     private void OpenModSite()
     {
+#pragma warning disable CA1416
         var url = Profile.Current.Type == LuminousGame.FFXV
             ? "https://www.curseforge.com/final-fantasy-xv"
             : "https://modworkshop.net/game/forspoken";
@@ -270,6 +271,7 @@ public sealed partial class Index : ModComponentBase
         {
             UseShellExecute = true
         });
+#pragma warning restore CA1416
     }
 
     public void SetContextMod(IFlagrumProject mod)

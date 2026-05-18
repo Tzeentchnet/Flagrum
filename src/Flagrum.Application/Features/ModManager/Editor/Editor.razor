@@ -11,7 +11,7 @@
 
 @inject NavigationManager Navigation
 @inject IPlatformService PlatformService
-@inject IStringLocalizer<Editor> Localizer
+@inject IStringLocalizer<Editor> EditorLocalizer
 @inject IModBuildInstructionFactory InstructionFactory
 @inject IServiceProvider Provider
 @inject ModManagerServiceBase ModManager
@@ -27,26 +27,26 @@
                 <div class="box p-6 mb-6 flex flex-row items-center">
                     <h4 class="text-grey-200 flex-grow">@Mod.Name</h4>
                     <PremiumComponent Type="PremiumComponentType.ProjectActions"/>
-                    <Button Icon="save" Text="@Localizer["Save"]" CssClass="mr-3" OnClick="Save"/>
+                    <Button Icon="save" Text="@EditorLocalizer["Save"]" CssClass="mr-3" OnClickAsync="Save"/>
                     @if (ModManagerService.HasAnyCachedFiles(Mod))
                     {
-                        <Button Icon="folder_off" Text="@Localizer["ClearCache"]" OnClick="ClearCache" CssClass="mr-3"/>
+                        <Button Icon="folder_off" Text="@EditorLocalizer["ClearCache"]" OnClick="ClearCache" CssClass="mr-3"/>
                     }
-                    <Button Icon="cancel" Text="@Localizer["Cancel"]" OnClick="@(() => Navigation.NavigateTo("/"))"/>
+                    <Button Icon="cancel" Text="@EditorLocalizer["Cancel"]" OnClick="@(() => Navigation.NavigateTo("/"))"/>
                 </div>
 
                 @* Build list bar *@
                 <div class="box flex flex-row items-center p-6 border-b border-black">
-                    <h5 class="text-grey-200 flex-grow">@Localizer["BuildList"]</h5>
+                    <h5 class="text-grey-200 flex-grow">@EditorLocalizer["BuildList"]</h5>
                     @if (Authentication.IsAuthenticated)
                     {
                         <PremiumComponent Type="PremiumComponentType.BuildListActions"/>
                     }
                     else
                     {
-                        <Button Icon="folder" Text="@Localizer["ReplaceAsset"]" CssClass="mr-3"
+                        <Button Icon="folder" Text="@EditorLocalizer["ReplaceAsset"]" CssClass="mr-3"
                                 OnClick="OpenReplaceModal"/>
-                        <Button Icon="block" Text="@Localizer["RemoveAsset"]" OnClick="OpenRemoveModal"/>
+                        <Button Icon="block" Text="@EditorLocalizer["RemoveAsset"]" OnClick="OpenRemoveModal"/>
                     }
                 </div>
 
@@ -75,7 +75,7 @@
                     @if (!InstructionGroups.Any())
                     {
                         <div class="rounded-md bg-accent1-900 border border-accent1-500 text-accent1-300 p-4 mt-4 mx-4">
-                            @Localizer["NoFileChangesSet"]
+                            @EditorLocalizer["NoFileChangesSet"]
                         </div>
                     }
                 </div>

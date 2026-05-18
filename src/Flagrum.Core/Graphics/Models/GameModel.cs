@@ -24,7 +24,7 @@ public class GameModel : GraphicsBinary
     public IList<GameModelBone> Bones { get; set; }
     public IList<GameModelNode> Nodes { get; set; }
 
-    public float Unknown { get; set; }
+    public new float Unknown { get; set; }
 
     public ulong GpubinCount { get; set; }
     public IList<ulong> GpubinHashes { get; set; }

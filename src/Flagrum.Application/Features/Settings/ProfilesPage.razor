@@ -61,9 +61,9 @@
 
 @code
 {
-    private ProfileModal Modal { get; set; }
-    private AlertModal Alert { get; set; }
-    private PromptModal Prompt { get; set; }
+    private ProfileModal Modal { get; set; } = null!;
+    private AlertModal Alert { get; set; } = null!;
+    private PromptModal Prompt { get; set; } = null!;
 
     private void Delete(IProfileViewModel profile)
     {
@@ -73,16 +73,15 @@
             return;
         }
 
-        Prompt.Title = "Warning";
-        Prompt.Heading = "Are you sure?";
-        Prompt.Subtext = "All files associated with this profile will be deleted, including mods, thumbnails, and file indices. This action cannot be undone!";
-        Prompt.OnYes = () =>
-        {
-            Profile.Delete(profile);
-            StateHasChanged();
-        };
-
-        Prompt.Open();
+        Prompt.Open(
+            "Warning",
+            "Are you sure?",
+            "All files associated with this profile will be deleted, including mods, thumbnails, and file indices. This action cannot be undone!",
+            onYes: () =>
+            {
+                Profile.Delete(profile);
+                StateHasChanged();
+            });
     }
 
     public void CallStateHasChanged() => StateHasChanged();

@@ -5,27 +5,27 @@ namespace Flagrum.Components.Controls;
 
 public partial class SearchSelectBase<TItem>
 {
-    private string _baseQuery;
-    [Parameter] public ICollection<TItem> Items { get; set; }
-    [Parameter] public RenderFragment<TItem> DisplayTemplate { get; set; }
-    [Parameter] public string Placeholder { get; set; }
-    [Parameter] public Func<TItem, string> SearchValue { get; set; }
+    private string? _baseQuery;
+    [Parameter] public ICollection<TItem> Items { get; set; } = [];
+    [Parameter] public RenderFragment<TItem> DisplayTemplate { get; set; } = _ => _ => { };
+    [Parameter] public string? Placeholder { get; set; }
+    [Parameter] public Func<TItem, string> SearchValue { get; set; } = item => item?.ToString() ?? string.Empty;
     [Parameter] public bool RemoveOnSelect { get; set; }
-    [Parameter] public virtual Action<TItem> OnSelect { get; set; }
+    [Parameter] public virtual Action<TItem>? OnSelect { get; set; }
     [Parameter] public bool CloseOnSelect { get; set; }
 
-    private string Id { get; set; }
-    protected List<SearchSelectItem<TItem>> EncapsulatedItems { get; set; }
-    private string WrapperId { get; set; }
-    private string SearchId { get; set; }
+    private string Id { get; set; } = string.Empty;
+    protected List<SearchSelectItem<TItem>> EncapsulatedItems { get; set; } = [];
+    private string WrapperId { get; set; } = string.Empty;
+    private string SearchId { get; set; } = string.Empty;
     protected bool IsSearching { get; set; }
 
-    protected virtual string Query
+    protected virtual string? Query
     {
         get => _baseQuery;
         set
         {
-            if (!EqualityComparer<string>.Default.Equals(_baseQuery, value))
+            if (!EqualityComparer<string?>.Default.Equals(_baseQuery, value))
             {
                 _baseQuery = value;
                 Search();
@@ -33,12 +33,12 @@ public partial class SearchSelectBase<TItem>
         }
     }
 
-    protected TItem SelectedItem { get; set; }
+    protected TItem? SelectedItem { get; set; }
     protected bool Remote { get; set; }
     protected bool HasNextPage { get; set; }
     protected int Page { get; set; } = 1;
 
-    private RenderFragment PlaceholderFragment { get; set; }
+    private RenderFragment PlaceholderFragment { get; set; } = _ => { };
 
     protected override Task OnInitializedAsync()
     {
@@ -128,5 +128,5 @@ public class SearchSelectItem<TItem>
 {
     public bool IsVisible { get; set; } = true;
     public bool IsSelected { get; set; }
-    public TItem Item { get; set; }
+    public TItem Item { get; set; } = default!;
 }

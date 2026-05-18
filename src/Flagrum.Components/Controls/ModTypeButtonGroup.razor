@@ -5,13 +5,13 @@
 @code
 {
     [Parameter]
-    public RenderFragment ChildContent { get; set; }
+    public RenderFragment ChildContent { get; set; } = _ => { };
 
     [Parameter]
     public int Target { get; set; }
 
     [Parameter]
-    public Action<int> OnItemSelected { get; set; }
+    public Action<int>? OnItemSelected { get; set; }
 
     private List<ModTypeButton> Children { get; } = new();
 
@@ -28,7 +28,7 @@
         }
 
         selectedChild.IsSelected = true;
-        OnItemSelected(selectedChild.Value);
+        OnItemSelected?.Invoke(selectedChild.Value);
         StateHasChanged();
     }
 }

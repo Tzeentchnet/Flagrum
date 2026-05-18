@@ -2,9 +2,9 @@
 
 public class ResultModal<TResult> : AutosizeModal
 {
-    private TaskCompletionSource<TResult> _taskCompletionSource;
+    private TaskCompletionSource<TResult>? _taskCompletionSource;
 
-    public override void Close(Action onClose = null)
+    public override void Close(Action? onClose = null)
     {
         _taskCompletionSource?.SetCanceled();
         _taskCompletionSource = null;
@@ -13,21 +13,19 @@ public class ResultModal<TResult> : AutosizeModal
 
     public void SetResult(TResult result)
     {
-        _taskCompletionSource.SetResult(result);
+        _taskCompletionSource?.SetResult(result);
         _taskCompletionSource = null;
     }
 
-    public Task<bool> TryGetResult(out TResult result)
+    public async Task<(bool Success, TResult? Result)> TryGetResultAsync()
     {
         try
         {
-            result = GetResult().GetAwaiter().GetResult();
-            return Task.FromResult(true);
+            return (true, await GetResult());
         }
-        catch (TaskCanceledException e)
+        catch (TaskCanceledException)
         {
-            result = default;
-            return Task.FromResult(false);
+            return (false, default);
         }
     }
 

@@ -38,7 +38,7 @@ public class AirspacePopup : Popup
     private bool m_alreadyLoaded;
 
     private bool? m_appliedTopMost;
-    private Window m_parentWindow;
+    private Window? m_parentWindow;
 
     public AirspacePopup()
     {
@@ -67,22 +67,26 @@ public class AirspacePopup : Popup
         set => SetValue(AllowOutsideScreenPlacementProperty, value);
     }
 
-    public Window ParentWindow
+    public Window? ParentWindow
     {
-        get => (Window)GetValue(ParentWindowProperty);
+        get => (Window?)GetValue(ParentWindowProperty);
         set => SetValue(ParentWindowProperty, value);
     }
 
     private static void OnIsTopmostChanged(DependencyObject source, DependencyPropertyChangedEventArgs e)
     {
-        var airspacePopup = source as AirspacePopup;
-        airspacePopup.SetTopmostState(airspacePopup.IsTopmost);
+        if (source is AirspacePopup airspacePopup)
+        {
+            airspacePopup.SetTopmostState(airspacePopup.IsTopmost);
+        }
     }
 
     private static void ParentWindowPropertyChanged(DependencyObject source, DependencyPropertyChangedEventArgs e)
     {
-        var airspacePopup = source as AirspacePopup;
-        airspacePopup.ParentWindowChanged();
+        if (source is AirspacePopup airspacePopup)
+        {
+            airspacePopup.ParentWindowChanged();
+        }
     }
 
     private void ParentWindowChanged()
@@ -94,7 +98,7 @@ public class AirspacePopup : Popup
         }
     }
 
-    private void PlacementTargetChanged(object sender, EventArgs e)
+    private void PlacementTargetChanged(object? sender, EventArgs e)
     {
         var placementTarget = PlacementTarget as FrameworkElement;
         if (placementTarget != null)
@@ -105,12 +109,11 @@ public class AirspacePopup : Popup
 
     public void UpdatePopupPosition()
     {
-        if (PlacementTarget == null)
+        if (PlacementTarget is not FrameworkElement placementTarget)
         {
             return;
         }
 
-        var placementTarget = PlacementTarget as FrameworkElement;
         var child = Child as FrameworkElement;
 
         if (PresentationSource.FromVisual(placementTarget) != null &&
@@ -165,7 +168,7 @@ public class AirspacePopup : Popup
             SystemParameters.VirtualScreenHeight - Math.Max(SystemParameters.VirtualScreenHeight, point.Y));
     }
 
-    private void OnPopupLoaded(object sender, RoutedEventArgs e)
+    private void OnPopupLoaded(object? sender, RoutedEventArgs e)
     {
         if (m_alreadyLoaded)
         {
@@ -191,7 +194,7 @@ public class AirspacePopup : Popup
         m_parentWindow.Deactivated += OnParentWindowDeactivated;
     }
 
-    private void OnPopupUnloaded(object sender, RoutedEventArgs e)
+    private void OnPopupUnloaded(object? sender, RoutedEventArgs e)
     {
         if (m_parentWindow == null)
         {
@@ -202,12 +205,12 @@ public class AirspacePopup : Popup
         m_parentWindow.Deactivated -= OnParentWindowDeactivated;
     }
 
-    private void OnParentWindowActivated(object sender, EventArgs e)
+    private void OnParentWindowActivated(object? sender, EventArgs e)
     {
         SetTopmostState(true);
     }
 
-    private void OnParentWindowDeactivated(object sender, EventArgs e)
+    private void OnParentWindowDeactivated(object? sender, EventArgs e)
     {
         if (IsTopmost == false)
         {
@@ -215,10 +218,10 @@ public class AirspacePopup : Popup
         }
     }
 
-    private void OnChildPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private void OnChildPreviewMouseLeftButtonDown(object? sender, MouseButtonEventArgs e)
     {
         SetTopmostState(true);
-        if (!m_parentWindow.IsActive && IsTopmost == false)
+        if (m_parentWindow is {IsActive: false} && IsTopmost == false)
         {
             m_parentWindow.Activate();
         }

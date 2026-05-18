@@ -24,15 +24,15 @@
 
 @code
 {
-    [Parameter] public RenderFragment HeaderView { get; set; }
-    [Parameter] public RenderFragment BodyView { get; set; }
-    [Parameter] public RenderFragment FooterView { get; set; }
+    [Parameter] public RenderFragment? HeaderView { get; set; }
+    [Parameter] public RenderFragment BodyView { get; set; } = _ => { };
+    [Parameter] public RenderFragment? FooterView { get; set; }
     [Parameter] public int Width { get; set; } = 400;
     [Parameter] public int Height { get; set; } = 300;
     [Parameter] public int Padding { get; set; } = 6;
     [Parameter] public string MaxWidth { get; set; } = "90%";
     [Parameter] public string MinWidth { get; set; } = "0";
-    [Parameter] public string CssClass { get; set; }
+    [Parameter] public string? CssClass { get; set; }
 
     protected string Display { get; set; } = "hidden";
     protected string Opacity { get; set; } = "opacity-0";
@@ -40,7 +40,9 @@
     private int FrameHeight => (HeaderView == null ? 0 : 60) + (FooterView == null ? 0 : 60);
     private string BodyMaxHeight => $"calc(90vh - {FrameHeight}px)";
 
-    public async void Open()
+    public void Open() => _ = OpenAsync();
+
+    public async Task OpenAsync()
     {
         Display = "flex";
         StateHasChanged();
@@ -51,7 +53,9 @@
         StateHasChanged();
     }
 
-    public virtual async void Close(Action? onClose = null)
+    public virtual void Close(Action? onClose = null) => _ = CloseAsync(onClose);
+
+    public virtual async Task CloseAsync(Action? onClose = null)
     {
         Opacity = "opacity-0";
         StateHasChanged();
@@ -63,7 +67,9 @@
         StateHasChanged();
     }
 
-    public virtual async void Close(Func<Task> onClose)
+    public virtual void Close(Func<Task> onClose) => _ = CloseAsync(onClose);
+
+    public virtual async Task CloseAsync(Func<Task> onClose)
     {
         Opacity = "opacity-0";
         StateHasChanged();

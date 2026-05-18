@@ -77,104 +77,110 @@ public class WorkshopModBuildContext
         }
     }
 
-    public async void ProcessFmd(int index, string path)
+    public async Task ProcessFmdAsync(int index, string path)
     {
         NeedsWaitFmd[index] = true;
         Flags |= WorkshopModBuildContextFlags.NeedsBuild;
         _stateChanged();
 
-        await Task.Run(async () =>
+        try
         {
-            var fmd = new FmdData();
-
-            await using var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
-            using var archive = new ZipArchive(stream, ZipArchiveMode.Read);
-
-            var dataEntry = archive.GetEntry("data.json");
-            await using var dataStream = dataEntry.Open();
-            var dataBytes = new byte[dataEntry.Length];
-            await dataStream.ReadAsync(dataBytes);
-
-            var json = Encoding.UTF8.GetString(dataBytes);
-            fmd.Gpubin = JsonConvert.DeserializeObject<BinmodModelData>(json);
-
-            var textures = new List<WorkshopModTexture>();
-            foreach (var mesh in fmd.Gpubin.Meshes)
+            await Task.Run(async () =>
             {
-                foreach (var (textureId, path) in mesh.Material.Textures
-                             .Where(t => !string.IsNullOrEmpty(t.Value)))
-                {
-                    var textureEntry =
-                        archive.Entries.FirstOrDefault(e => e.FullName.Contains($"{mesh.Name}/{textureId}"));
-                    await using var textureStream = textureEntry.Open();
-                    var textureBytes = new byte[textureEntry.Length];
-                    await textureStream.ReadAsync(textureBytes);
+                var fmd = new FmdData();
 
-                    textures.Add(new WorkshopModTexture
+                await using var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
+                using var archive = new ZipArchive(stream, ZipArchiveMode.Read);
+
+                var dataEntry = archive.GetEntry("data.json");
+                await using var dataStream = dataEntry.Open();
+                var dataBytes = new byte[dataEntry.Length];
+                await dataStream.ReadExactlyAsync(dataBytes);
+
+                var json = Encoding.UTF8.GetString(dataBytes);
+                fmd.Gpubin = JsonConvert.DeserializeObject<BinmodModelData>(json);
+
+                var textures = new List<WorkshopModTexture>();
+                foreach (var mesh in fmd.Gpubin.Meshes)
+                {
+                    foreach (var (textureId, path) in mesh.Material.Textures
+                                 .Where(t => !string.IsNullOrEmpty(t.Value)))
                     {
-                        Mesh = mesh.Name,
-                        TextureSlot = textureId,
-                        Name =
-                            $"{mesh.Name.ToSafeString()}_{textureId.ToSafeString()}{BinmodTextureHelper.GetSuffix(textureId)}",
-                        Extension = path.Split('\\', '/').Last().Split('.').Last(),
-                        Type = BinmodTextureHelper.GetType(textureId),
-                        Data = textureBytes
-                    });
+                        var textureEntry =
+                            archive.Entries.FirstOrDefault(e => e.FullName.Contains($"{mesh.Name}/{textureId}"));
+                        await using var textureStream = textureEntry.Open();
+                        var textureBytes = new byte[textureEntry.Length];
+                        await textureStream.ReadExactlyAsync(textureBytes);
+
+                        textures.Add(new WorkshopModTexture
+                        {
+                            Mesh = mesh.Name,
+                            TextureSlot = textureId,
+                            Name =
+                                $"{mesh.Name.ToSafeString()}_{textureId.ToSafeString()}{BinmodTextureHelper.GetSuffix(textureId)}",
+                            Extension = path.Split('\\', '/').Last().Split('.').Last(),
+                            Type = BinmodTextureHelper.GetType(textureId),
+                            Data = textureBytes
+                        });
+                    }
                 }
-            }
 
-            var materials = new Dictionary<string, byte[]>();
-            foreach (var materialEntry in archive.Entries.Where(e => e.FullName.Contains("materials/")))
-            {
-                await using var materialStream = materialEntry.Open();
-                var materialBytes = new byte[materialEntry.Length];
-                _ = await materialStream.ReadAsync(materialBytes);
-                materials.Add(materialEntry.Name.Replace(".json", ""), materialBytes);
-            }
-
-            foreach (var data in textures)
-            {
-                var texture = new FmdTexture
+                var materials = new Dictionary<string, byte[]>();
+                foreach (var materialEntry in archive.Entries.Where(e => e.FullName.Contains("materials/")))
                 {
-                    Mesh = data.Mesh,
-                    TextureSlot = data.TextureSlot,
-                    Data = _converter.ConvertImageToNewBtex(data.Name, data.Extension, data.Type, data.Data,
-                        LuminousGame.FFXV)
-                };
+                    await using var materialStream = materialEntry.Open();
+                    var materialBytes = new byte[materialEntry.Length];
+                    await materialStream.ReadExactlyAsync(materialBytes);
+                    materials.Add(materialEntry.Name.Replace(".json", ""), materialBytes);
+                }
 
-                fmd.Textures.Add(texture);
-            }
+                foreach (var data in textures)
+                {
+                    var texture = new FmdTexture
+                    {
+                        Mesh = data.Mesh,
+                        TextureSlot = data.TextureSlot,
+                        Data = _converter.ConvertImageToNewBtex(data.Name, data.Extension, data.Type, data.Data,
+                            LuminousGame.FFXV)
+                    };
 
-            Parallel.ForEach(materials, material =>
-            {
-                var materialTemplateJson = Encoding.UTF8.GetString(material.Value);
-                var legacyMaterial = JsonConvert.DeserializeObject<WorkshopModGameMaterial>(materialTemplateJson);
-                fmd.Materials.TryAdd(material.Key, legacyMaterial.ToGameMaterial());
+                    fmd.Textures.Add(texture);
+                }
+
+                Parallel.ForEach(materials, material =>
+                {
+                    var materialTemplateJson = Encoding.UTF8.GetString(material.Value);
+                    var legacyMaterial = JsonConvert.DeserializeObject<WorkshopModGameMaterial>(materialTemplateJson);
+                    fmd.Materials.TryAdd(material.Key, legacyMaterial.ToGameMaterial());
+                });
+
+                Fmds[index] = fmd;
             });
-
-            Fmds[index] = fmd;
-        });
+        }
+        finally
+        {
+            NeedsWaitFmd[index] = false;
+            _stateChanged();
+        }
     }
 
-    public async void ProcessPreviewImage(string file, Func<Task> onUpdate)
+    public async Task ProcessPreviewImageAsync(string file, Func<Task> onUpdate)
     {
         Flags |= WorkshopModBuildContextFlags.PreviewImageChanged;
 
-        await Task.Run(async () =>
+        var buffer = await File.ReadAllBytesAsync(file);
+
+        await File.WriteAllBytesAsync($"{IOHelper.GetWebRoot()}\\images\\current_preview.png", buffer);
+        await onUpdate();
+
+        await Task.Run(() =>
         {
-            await using var stream = new FileStream(file, FileMode.Open, FileAccess.Read);
-            var buffer = new byte[stream.Length];
-            stream.Read(buffer);
-
-            await File.WriteAllBytesAsync($"{IOHelper.GetWebRoot()}\\images\\current_preview.png", buffer);
-            await onUpdate();
-
             PreviewBtex = _converter.WicToBinmodPreviewBlackTexture("$preview", buffer, out var jpeg);
             PreviewImage = jpeg;
         });
     }
 
-    public async void ProcessPreviewImage(byte[] image)
+    public async Task ProcessPreviewImageAsync(byte[] image)
     {
         await Task.Run(() =>
         {
@@ -183,26 +189,24 @@ public class WorkshopModBuildContext
         });
     }
 
-    public async void ProcessThumbnailImage(string file, Func<Task> onUpdate)
+    public async Task ProcessThumbnailImageAsync(string file, Func<Task> onUpdate)
     {
         ThumbnailBtex = null;
         Flags |= WorkshopModBuildContextFlags.PreviewImageChanged;
 
-        await Task.Run(async () =>
+        var buffer = await File.ReadAllBytesAsync(file);
+        ThumbnailImage = buffer;
+
+        await File.WriteAllBytesAsync($"{IOHelper.GetWebRoot()}\\images\\current_thumbnail.png", buffer);
+        await onUpdate();
+
+        await Task.Run(() =>
         {
-            await using var stream = new FileStream(file, FileMode.Open, FileAccess.Read);
-            var buffer = new byte[stream.Length];
-            stream.Read(buffer);
-            ThumbnailImage = buffer;
-
-            await File.WriteAllBytesAsync($"{IOHelper.GetWebRoot()}\\images\\current_thumbnail.png", buffer);
-            await onUpdate();
-
             ThumbnailBtex = _converter.WicToBinmodThumbnailBlackTexture("default", buffer);
         });
     }
 
-    public async void ProcessThumbnailImage(byte[] image)
+    public async Task ProcessThumbnailImageAsync(byte[] image)
     {
         await Task.Run(() =>
         {

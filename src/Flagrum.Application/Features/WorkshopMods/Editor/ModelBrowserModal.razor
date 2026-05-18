@@ -1,5 +1,4 @@
-﻿@using System.Timers
-@using Flagrum.Abstractions.AssetExplorer
+﻿@using Flagrum.Abstractions.AssetExplorer
 @using Flagrum.Application.Features.AssetExplorer.Base
 @using Flagrum.Application.Features.AssetExplorer.GameView
 @implements IAssetExplorerParent
@@ -34,7 +33,6 @@
 {
     [CascadingParameter] public ModelReplacement Parent { get; set; }
 
-    private Timer _timer;
     private IAssetExplorerNode _currentNode;
     private ModelReplacement.StringWrapper _path;
 

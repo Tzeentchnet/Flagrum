@@ -475,7 +475,7 @@ public class EbexWriter : IDisposable
                 return true;
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             //Console.WriteLine("canSkip " + ex.Message);
         }

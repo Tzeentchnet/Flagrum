@@ -25,17 +25,17 @@
 
     private string DisabledClass => DisabledLight ? "bg-grey-700 text-grey-300" : "bg-grey-800 text-grey-400";
 
-    [Parameter] public string Icon { get; set; }
+    [Parameter] public string? Icon { get; set; }
 
-    [Parameter] public string Text { get; set; }
+    [Parameter] public string? Text { get; set; }
 
-    [Parameter] public Action OnClick { get; set; }
+    [Parameter] public Action? OnClick { get; set; }
 
-    [Parameter] public Func<Task> OnClickAsync { get; set; }
+    [Parameter] public Func<Task>? OnClickAsync { get; set; }
 
-    [Parameter] public string CssClass { get; set; }
+    [Parameter] public string? CssClass { get; set; }
 
-    [Parameter] public string CssStyle { get; set; }
+    [Parameter] public string? CssStyle { get; set; }
 
     [Parameter] public bool IsDisabled { get; set; }
 
@@ -58,10 +58,15 @@
                 IsDisabled = true;
                 StateHasChanged();
 
-                await OnClickAsync();
-
-                IsDisabled = false;
-                StateHasChanged();
+                try
+                {
+                    await OnClickAsync();
+                }
+                finally
+                {
+                    IsDisabled = false;
+                    StateHasChanged();
+                }
             }
         }
     }

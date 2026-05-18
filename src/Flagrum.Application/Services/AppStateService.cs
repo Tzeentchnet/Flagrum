@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Flagrum.Abstractions;
 using Flagrum.Abstractions.AssetExplorer;
 using Flagrum.Core.Archive;
-using Flagrum.Core.Utilities;
 using Flagrum.Application.Features.AssetExplorer.Indexing;
 using Flagrum.Application.Features.WorkshopMods.Data;
 using FileIndexNode = Flagrum.Application.Features.AssetExplorer.Indexing.FileIndexNode;
@@ -77,7 +76,7 @@ public class AppStateService
         if (_profile.IsReady)
         {
             // Run this separately as it shouldn't delay the startup
-            ThreadHelper.RunOnNewThread(async () =>
+            _ = Task.Run(async () =>
             {
                 if (_fileIndex.IsEmpty)
                 {

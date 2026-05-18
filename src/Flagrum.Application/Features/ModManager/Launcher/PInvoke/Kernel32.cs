@@ -1,5 +1,6 @@
-﻿using System;
-using System.Runtime.ConstrainedExecution;
+﻿#nullable enable annotations
+
+using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
@@ -87,7 +88,6 @@ public static class Kernel32
     public static extern uint WaitForSingleObject(IntPtr hHandle, uint dwMilliseconds);
 
     [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-    [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
     [SuppressUnmanagedCodeSecurity]
     [return: MarshalAs(UnmanagedType.Bool)]
     public static extern bool CloseHandle(IntPtr hObject);

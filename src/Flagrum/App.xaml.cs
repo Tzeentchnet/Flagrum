@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Flagrum.Abstractions;
@@ -57,11 +56,24 @@ public partial class App
         MainWindow = splash;
         splash.Show();
 
-        new Thread(() =>
+        var fmodPath = e.Args.Length == 1 && e.Args[0].EndsWith(".fmod") ? e.Args[0] : null;
+        _ = Task.Run(async () =>
         {
-            var fmodPath = e.Args.Length == 1 && e.Args[0].EndsWith(".fmod") ? e.Args[0] : null;
-            StartupAsync(splash, fmodPath).Wait();
-        }).Start();
+            try
+            {
+                await StartupAsync(splash, fmodPath);
+            }
+            catch (Exception exception)
+            {
+                Log.Fatal(exception, "Flagrum failed to start");
+                await Dispatcher.InvokeAsync(() =>
+                {
+                    MessageBox.Show("Flagrum failed to start. See logs for details.",
+                        "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Current.Shutdown(1);
+                });
+            }
+        });
     }
 
     private async Task StartupAsync(SplashWindow splash, string? fmodPath)
@@ -92,7 +104,7 @@ public partial class App
         {
             MessageBox.Show("This version of Flagrum is no longer supported.",
                 "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            Dispatcher.InvokeAsync(() => Current.Shutdown(0));
+            _ = Dispatcher.InvokeAsync(() => Current.Shutdown(0));
             return;
         }
 

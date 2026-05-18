@@ -3,8 +3,8 @@
 
 @code
 {
-    [Parameter] public string Text { get; set; }
-    [Parameter] public string Uri { get; set; }
+    [Parameter] public string Text { get; set; } = string.Empty;
+    [Parameter] public string Uri { get; set; } = string.Empty;
 
     [Parameter]
     public string CssClass { get; set; } = "mt-2";

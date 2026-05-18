@@ -279,7 +279,11 @@ public partial class ViewportHelper
             return null;
         }
 
-        var baseContext = (FileSystemModelContext)context!;
+        if (context is not FileSystemModelContext baseContext)
+        {
+            return null;
+        }
+
         var modelContext = new FileSystemModelContext
         {
             Uri = uri,
@@ -296,6 +300,11 @@ public partial class ViewportHelper
 
     private string? UriToRelativePath(FileSystemModelContext context)
     {
+        if (context.RootDirectory == null)
+        {
+            return null;
+        }
+
         // Get path tokens
         var target = GetMatchingUriStart(context.Uri, context.RootUri);
         var rootUriTokens = context.RootUri.Replace("data://", "data/").Split('/');
@@ -437,8 +446,8 @@ public partial class ViewportHelper
 
     private class FileSystemModelContext
     {
-        public string Uri { get; set; }
-        public string RootUri { get; set; }
+        public string Uri { get; set; } = string.Empty;
+        public string RootUri { get; set; } = string.Empty;
         public string? RootDirectory { get; set; }
     }
 }

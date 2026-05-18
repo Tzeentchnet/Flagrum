@@ -44,7 +44,7 @@ public class EntityGroup : Entity
 
             dynamicArray2.ClearChild();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // DocumentInterface.DocumentContainer.LogAppendCurrentParagraphParse(
             //     "<Span Foreground=\"Red\">ClearEntities : " + ex.Message + "</Span><LineBreak />");

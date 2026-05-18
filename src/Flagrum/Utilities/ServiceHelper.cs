@@ -34,7 +34,7 @@ public static class ServiceHelper
         services.AddSingleton<IProfileService, ProfileService>();
         services.AddSingleton<AppStateService>();
         services.AddSingleton<IPlatformService, PlatformService>();
-        services.AddBlazorWebView();
+        services.AddWpfBlazorWebView();
         services.AddFlagrum();
         services.AddFlagrumApplicationManual();
 

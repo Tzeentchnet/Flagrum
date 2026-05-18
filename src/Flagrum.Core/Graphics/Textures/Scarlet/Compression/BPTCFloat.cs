@@ -136,7 +136,7 @@ internal static class BPTCFloat
             return mode;
         }
 
-        return map_mode_table[mode | BPTC.detexBlock128ExtractBits(block, 3) << 2];
+        return map_mode_table[(int)((uint)mode | (BPTC.detexBlock128ExtractBits(block, 3) << 2))];
     }
 
     private static int GetPartitionIndex(int nu_subsets, uint partition_set_id, int i)

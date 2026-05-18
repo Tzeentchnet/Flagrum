@@ -28,7 +28,7 @@ public class Bootstrapper : ComponentBase
 
     [CascadingParameter] public MainLayout Parent { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         HandleEarcModThumbnails();
 
@@ -36,7 +36,7 @@ public class Bootstrapper : ComponentBase
 
         if (Profile.Current.Type == LuminousGame.FFXV)
         {
-            Task.Run(LoadBinmods);
+            await LoadBinmods();
         }
     }
 
@@ -131,11 +131,11 @@ public class Bootstrapper : ComponentBase
             });
 
             AppState.IsModListInitialized = true;
-            DeleteUnusedWorkshopThumbnails();
+            await DeleteUnusedWorkshopThumbnails();
         }
     }
 
-    private async void DeleteUnusedWorkshopThumbnails()
+    private async Task DeleteUnusedWorkshopThumbnails()
     {
         await Task.Run(() =>
         {
@@ -153,9 +153,10 @@ public class Bootstrapper : ComponentBase
                     }
                 }
             }
-            catch
+            catch (Exception exception)
             {
                 // Ignore, try again next time
+                Logger.LogWarning(exception, "Failed to delete unused workshop thumbnails");
             }
         });
     }

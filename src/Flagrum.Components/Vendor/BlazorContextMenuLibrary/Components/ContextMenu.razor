@@ -25,7 +25,7 @@
 
 @code{
     [Parameter]
-    public RenderFragment<MenuRenderingContext> ChildContent { get; set; }
+    public RenderFragment<MenuRenderingContext> ChildContent { get; set; } = _ => _ => { };
 
     [Parameter]
     public ContextMenuDirection Direction { get; set; } = ContextMenuDirection.Left;
